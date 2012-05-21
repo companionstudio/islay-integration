@@ -55,5 +55,9 @@ module IslayIntegration
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+
+    # This is used to ensure the Islay plugins reload on each request.
+    config.reload_plugins = true if Rails.env.development?
+    config.railties_order = [Islay::Engine, IslayShop::Engine, :main_app, :all]
   end
 end

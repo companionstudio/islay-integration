@@ -18,6 +18,12 @@ PATH
       streamio-ffmpeg (>= 0.8.5)
       zipruby (>= 0.3.6)
 
+PATH
+  remote: ../islay-shop
+  specs:
+    islay_shop (0.0.1)
+      rails (~> 3.2.3)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -169,6 +175,7 @@ PLATFORMS
 
 DEPENDENCIES
   islay!
+  islay_shop!
   pg
   rails (= 3.2.3)
   sass-rails (~> 3.2.3)
