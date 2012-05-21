@@ -1,6 +1,8 @@
 /.rvmrc
 /.bundle
 /db/*.sqlite3
-/db/migrations/*
+/db/schema.*
+/db/*.dump
+/db/migrate/*.rb
 /log/*.log
 /tmp
