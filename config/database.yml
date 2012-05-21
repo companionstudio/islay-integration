@@ -1,8 +1,0 @@
-development:
-  host: localhost
-  adapter: postgresql
-  encoding: unicode
-  database: islay_integration_dev
-  username: lukesutton
-  password: nopnop
-  pool: 5
