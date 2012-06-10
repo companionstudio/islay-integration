@@ -7,3 +7,4 @@
 /db/migrate/*.rb
 /log/*.log
 /tmp
+/public/2012
