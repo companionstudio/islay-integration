@@ -2,6 +2,8 @@ source 'https://rubygems.org'
 
 gem 'pg'
 
+gem 'spooky_core', :git => "git@github.com:spookandpuff/spooky-core.git"
+
 gem 'islay',      :path => '../islay'
 gem 'islay_shop', :path => '../islay-shop'
 gem 'islay_blog', :path => '../islay-blog'
