@@ -9,6 +9,7 @@ end
 Islay::Engine.content do |c|
   c.page(:home, 'Home') do
     content(:what, 'What What', :markdown)
+    features(true)
   end
 
   c.page(:about, 'About Us') do
