@@ -20,7 +20,7 @@ GIT
 
 GIT
   remote: https://github.com/spookandpuff/islay.git
-  revision: b39827296f43af3cbe0a3ea82776f2bf387e3779
+  revision: 1e4984004e3678a6339f3c271d8cfe559c2dc3bf
   specs:
     islay (0.5.0)
       activerecord-postgres-hstore (~> 0.3.0)
