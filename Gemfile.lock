@@ -1,12 +1,4 @@
 GIT
-  remote: git@github.com:spookandpuff/spooky-core.git
-  revision: 89e1578c3f8d5585ee9b955dab7064e56569d8fa
-  specs:
-    spooky_core (0.11)
-      httparty (>= 0.8.1)
-      nokogiri (>= 1.5.0)
-
-GIT
   remote: https://github.com/spookandpuff/islay-blog.git
   revision: c194624a4f944e06f86d75187bd1be90071aa634
   specs:
@@ -56,6 +48,14 @@ GIT
       simple_form (~> 2.0.2)
       streamio-ffmpeg (~> 0.8.5)
       zipruby (~> 0.3.6)
+
+GIT
+  remote: https://github.com/spookandpuff/spooky-core.git
+  revision: 89e1578c3f8d5585ee9b955dab7064e56569d8fa
+  specs:
+    spooky_core (0.11)
+      httparty (>= 0.8.1)
+      nokogiri (>= 1.5.0)
 
 GEM
   remote: https://rubygems.org/

@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'pg'
 
-gem 'spooky_core', :git => "git@github.com:spookandpuff/spooky-core.git"
+gem 'spooky_core', :git => "https://github.com/spookandpuff/spooky-core.git"
 
 gem 'islay',       :git => "https://github.com/spookandpuff/islay.git"
 gem 'islay_shop',  :git => "https://github.com/spookandpuff/islay-shop.git"
