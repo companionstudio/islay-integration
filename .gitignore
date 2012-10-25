@@ -4,7 +4,6 @@
 /db/*.sqlite3
 /db/schema.*
 /db/*.dump
-/db/migrate/*.rb
 /log/*.log
 /tmp
 /public/2012
