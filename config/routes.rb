@@ -1,8 +1,5 @@
 IslayIntegration::Application.routes.draw do
-  mount Islay::Engine => '/'
-  mount IslayShop::Engine => '/'
-
-  namespace :public, :path => '' do
-    get '' => 'home#index', :as => 'home'
+  islay_public 'islay_integration' do
+    get '/' => 'home#index', :as => 'home'
   end
 end
