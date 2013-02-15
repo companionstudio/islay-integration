@@ -51,3 +51,6 @@ class SpecData
   end
 end
 
+# Load all of the spec data definitions stored in the *_run.rb files.
+Dir[Rails.root.join("spec/data/*_data.rb")].each {|f| require f}
+
