@@ -2,5 +2,7 @@
 
 FactoryGirl.define do
   factory :product do
+    published true
+    status 'for_sale'
   end
 end
