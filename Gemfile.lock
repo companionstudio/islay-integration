@@ -131,6 +131,11 @@ GEM
     excon (0.16.10)
     execjs (1.4.0)
       multi_json (~> 1.0)
+    factory_girl (4.2.0)
+      activesupport (>= 3.0.0)
+    factory_girl_rails (4.2.1)
+      factory_girl (~> 4.2.0)
+      railties (>= 3.0.0)
     faye-websocket (0.4.6)
       eventmachine (>= 0.12.0)
     ffaker (1.15.0)
@@ -180,7 +185,6 @@ GEM
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
       railties (>= 3.0.0)
-    machinist (2.0)
     mail (2.4.4)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
@@ -291,11 +295,11 @@ PLATFORMS
 
 DEPENDENCIES
   capybara (~> 1.1.2)
+  factory_girl_rails (~> 4.2.1)
   ffaker (~> 1.15.0)
   islay!
   islay_blog!
   islay_shop!
-  machinist (~> 2.0)
   pg
   poltergeist (~> 1.0.2)
   rspec-rails (~> 2.12.2)

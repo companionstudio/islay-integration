@@ -46,6 +46,8 @@ module IslayIntegration
 
     config.action_controller.include_all_helpers = false
 
+    config.generators {|g| g.fixture_replacement :factory_girl, :suffix => 'factory'}
+
     # Enforce whitelist mode for mass assignment.
     # This will create an empty whitelist of attributes available for mass-assignment for all models
     # in your app. As such, your models will need to explicitly whitelist or blacklist accessible

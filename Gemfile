@@ -14,12 +14,12 @@ group :assets do
 end
 
 group :test, :development do
-  gem 'rspec-rails',   "~> 2.12.2"
+  gem 'rspec-rails',        "~> 2.12.2"
+  gem 'factory_girl_rails', "~> 4.2.1"
+  gem "ffaker",             "~> 1.15.0"
 end
 
 group :test do
-  gem "machinist",     "~> 2.0"
-  gem "ffaker",        "~> 1.15.0"
   gem "capybara",      "~> 1.1.2"
   gem "poltergeist",   "~> 1.0.2"
 end
