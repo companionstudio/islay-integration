@@ -282,12 +282,8 @@ SET default_with_oids = false;
 
 CREATE TABLE applied_promotions (
     id integer NOT NULL,
-    promotion_id integer NOT NULL,
-    promotion_effect_id integer NOT NULL,
     order_id integer NOT NULL,
-    qualifying_order_item_id integer,
-    bonus_order_item_id integer,
-    created_at timestamp without time zone
+    promotion_id integer NOT NULL
 );
 
 
@@ -752,6 +748,149 @@ ALTER SEQUENCE features_id_seq OWNED BY features.id;
 
 
 --
+-- Name: groups; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE groups (
+    id integer NOT NULL,
+    name character varying(400) NOT NULL,
+    config hstore,
+    creator_id integer NOT NULL,
+    updater_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: groups_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE groups_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE groups_id_seq OWNED BY groups.id;
+
+
+--
+-- Name: manufacturer_assets; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE manufacturer_assets (
+    id integer NOT NULL,
+    manufacturer_id integer NOT NULL,
+    asset_id integer NOT NULL,
+    "position" integer DEFAULT 1 NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: manufacturer_assets_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE manufacturer_assets_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: manufacturer_assets_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE manufacturer_assets_id_seq OWNED BY manufacturer_assets.id;
+
+
+--
+-- Name: manufacturers; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE manufacturers (
+    id integer NOT NULL,
+    "position" integer DEFAULT 1 NOT NULL,
+    name character varying(200) NOT NULL,
+    slug character varying(200) NOT NULL,
+    description character varying(4000),
+    metadata hstore,
+    published boolean DEFAULT false NOT NULL,
+    published_at timestamp without time zone,
+    first_published_at timestamp without time zone,
+    creator_id integer NOT NULL,
+    updater_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    terms tsvector
+);
+
+
+--
+-- Name: manufacturers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE manufacturers_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: manufacturers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE manufacturers_id_seq OWNED BY manufacturers.id;
+
+
+--
+-- Name: memberships; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE memberships (
+    id integer NOT NULL,
+    person_id integer NOT NULL,
+    group_id integer NOT NULL,
+    config hstore,
+    creator_id integer NOT NULL,
+    updater_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: memberships_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE memberships_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: memberships_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE memberships_id_seq OWNED BY memberships.id;
+
+
+--
 -- Name: order_items; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -967,7 +1106,10 @@ CREATE TABLE people (
     name character varying(200) NOT NULL,
     email character varying(200) NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    encrypted_password character varying(200) NOT NULL,
+    reset_password_token character varying(200),
+    reset_password_sent_at timestamp without time zone
 );
 
 
@@ -1198,7 +1340,8 @@ CREATE TABLE products (
     updater_id integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    terms tsvector
+    terms tsvector,
+    manufacturer_id integer
 );
 
 
@@ -1500,7 +1643,8 @@ CREATE TABLE skus (
     creator_id integer NOT NULL,
     updater_id integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    terms tsvector
 );
 
 
@@ -1647,6 +1791,34 @@ ALTER TABLE ONLY credit_card_transactions ALTER COLUMN id SET DEFAULT nextval('c
 --
 
 ALTER TABLE ONLY features ALTER COLUMN id SET DEFAULT nextval('features_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY groups ALTER COLUMN id SET DEFAULT nextval('groups_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY manufacturer_assets ALTER COLUMN id SET DEFAULT nextval('manufacturer_assets_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY manufacturers ALTER COLUMN id SET DEFAULT nextval('manufacturers_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY memberships ALTER COLUMN id SET DEFAULT nextval('memberships_id_seq'::regclass);
 
 
 --
@@ -1901,6 +2073,38 @@ ALTER TABLE ONLY features
 
 
 --
+-- Name: groups_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY groups
+    ADD CONSTRAINT groups_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: manufacturer_assets_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY manufacturer_assets
+    ADD CONSTRAINT manufacturer_assets_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: manufacturers_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY manufacturers
+    ADD CONSTRAINT manufacturers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: memberships_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY memberships
+    ADD CONSTRAINT memberships_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: order_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2069,24 +2273,10 @@ ALTER TABLE ONLY users
 
 
 --
--- Name: index_applied_promotions_on_bonus_order_item_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_applied_promotions_on_order_id_and_promotion_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_applied_promotions_on_bonus_order_item_id ON applied_promotions USING btree (bonus_order_item_id);
-
-
---
--- Name: index_applied_promotions_on_order_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_applied_promotions_on_order_id ON applied_promotions USING btree (order_id);
-
-
---
--- Name: index_applied_promotions_on_promotion_effect_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_applied_promotions_on_promotion_effect_id ON applied_promotions USING btree (promotion_effect_id);
+CREATE UNIQUE INDEX index_applied_promotions_on_order_id_and_promotion_id ON applied_promotions USING btree (order_id, promotion_id);
 
 
 --
@@ -2094,13 +2284,6 @@ CREATE INDEX index_applied_promotions_on_promotion_effect_id ON applied_promotio
 --
 
 CREATE INDEX index_applied_promotions_on_promotion_id ON applied_promotions USING btree (promotion_id);
-
-
---
--- Name: index_applied_promotions_on_qualifying_order_item_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_applied_promotions_on_qualifying_order_item_id ON applied_promotions USING btree (qualifying_order_item_id);
 
 
 --
@@ -2265,6 +2448,90 @@ CREATE INDEX index_features_on_updater_id ON features USING btree (updater_id);
 
 
 --
+-- Name: index_groups_on_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_groups_on_creator_id ON groups USING btree (creator_id);
+
+
+--
+-- Name: index_groups_on_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_groups_on_updater_id ON groups USING btree (updater_id);
+
+
+--
+-- Name: index_manufacturer_assets_on_asset_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_manufacturer_assets_on_asset_id ON manufacturer_assets USING btree (asset_id);
+
+
+--
+-- Name: index_manufacturer_assets_on_manufacturer_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_manufacturer_assets_on_manufacturer_id ON manufacturer_assets USING btree (manufacturer_id);
+
+
+--
+-- Name: index_manufacturers_on_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_manufacturers_on_creator_id ON manufacturers USING btree (creator_id);
+
+
+--
+-- Name: index_manufacturers_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_manufacturers_on_name ON manufacturers USING btree (name);
+
+
+--
+-- Name: index_manufacturers_on_slug; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_manufacturers_on_slug ON manufacturers USING btree (slug);
+
+
+--
+-- Name: index_manufacturers_on_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_manufacturers_on_updater_id ON manufacturers USING btree (updater_id);
+
+
+--
+-- Name: index_memberships_on_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_memberships_on_creator_id ON memberships USING btree (creator_id);
+
+
+--
+-- Name: index_memberships_on_group_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_memberships_on_group_id ON memberships USING btree (group_id);
+
+
+--
+-- Name: index_memberships_on_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_memberships_on_person_id ON memberships USING btree (person_id);
+
+
+--
+-- Name: index_memberships_on_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_memberships_on_updater_id ON memberships USING btree (updater_id);
+
+
+--
 -- Name: index_order_items_on_order_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2346,6 +2613,13 @@ CREATE INDEX index_pages_on_creator_id ON pages USING btree (creator_id);
 --
 
 CREATE INDEX index_pages_on_updater_id ON pages USING btree (updater_id);
+
+
+--
+-- Name: index_people_on_reset_password_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_people_on_reset_password_token ON people USING btree (reset_password_token);
 
 
 --
@@ -2444,6 +2718,13 @@ CREATE INDEX index_product_variants_on_product_id ON product_variants USING btre
 --
 
 CREATE INDEX index_products_on_creator_id ON products USING btree (creator_id);
+
+
+--
+-- Name: index_products_on_manufacturer_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_products_on_manufacturer_id ON products USING btree (manufacturer_id);
 
 
 --
@@ -2615,14 +2896,6 @@ CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (v
 
 
 --
--- Name: applied_promotions_bonus_order_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY applied_promotions
-    ADD CONSTRAINT applied_promotions_bonus_order_item_id_fkey FOREIGN KEY (bonus_order_item_id) REFERENCES order_items(id);
-
-
---
 -- Name: applied_promotions_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2631,27 +2904,11 @@ ALTER TABLE ONLY applied_promotions
 
 
 --
--- Name: applied_promotions_promotion_effect_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY applied_promotions
-    ADD CONSTRAINT applied_promotions_promotion_effect_id_fkey FOREIGN KEY (promotion_effect_id) REFERENCES promotion_effects(id);
-
-
---
 -- Name: applied_promotions_promotion_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY applied_promotions
-    ADD CONSTRAINT applied_promotions_promotion_id_fkey FOREIGN KEY (promotion_id) REFERENCES promotions(id);
-
-
---
--- Name: applied_promotions_qualifying_order_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY applied_promotions
-    ADD CONSTRAINT applied_promotions_qualifying_order_item_id_fkey FOREIGN KEY (qualifying_order_item_id) REFERENCES order_items(id);
+    ADD CONSTRAINT applied_promotions_promotion_id_fkey FOREIGN KEY (promotion_id) REFERENCES promotions(id) ON DELETE CASCADE;
 
 
 --
@@ -2828,6 +3085,86 @@ ALTER TABLE ONLY features
 
 ALTER TABLE ONLY features
     ADD CONSTRAINT features_updater_id_fkey FOREIGN KEY (updater_id) REFERENCES users(id);
+
+
+--
+-- Name: groups_creator_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY groups
+    ADD CONSTRAINT groups_creator_id_fkey FOREIGN KEY (creator_id) REFERENCES users(id);
+
+
+--
+-- Name: groups_updater_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY groups
+    ADD CONSTRAINT groups_updater_id_fkey FOREIGN KEY (updater_id) REFERENCES users(id);
+
+
+--
+-- Name: manufacturer_assets_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY manufacturer_assets
+    ADD CONSTRAINT manufacturer_assets_asset_id_fkey FOREIGN KEY (asset_id) REFERENCES assets(id) ON DELETE CASCADE;
+
+
+--
+-- Name: manufacturer_assets_manufacturer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY manufacturer_assets
+    ADD CONSTRAINT manufacturer_assets_manufacturer_id_fkey FOREIGN KEY (manufacturer_id) REFERENCES manufacturers(id) ON DELETE CASCADE;
+
+
+--
+-- Name: manufacturers_creator_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY manufacturers
+    ADD CONSTRAINT manufacturers_creator_id_fkey FOREIGN KEY (creator_id) REFERENCES users(id);
+
+
+--
+-- Name: manufacturers_updater_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY manufacturers
+    ADD CONSTRAINT manufacturers_updater_id_fkey FOREIGN KEY (updater_id) REFERENCES users(id);
+
+
+--
+-- Name: memberships_creator_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY memberships
+    ADD CONSTRAINT memberships_creator_id_fkey FOREIGN KEY (creator_id) REFERENCES users(id);
+
+
+--
+-- Name: memberships_group_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY memberships
+    ADD CONSTRAINT memberships_group_id_fkey FOREIGN KEY (group_id) REFERENCES groups(id);
+
+
+--
+-- Name: memberships_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY memberships
+    ADD CONSTRAINT memberships_person_id_fkey FOREIGN KEY (person_id) REFERENCES people(id);
+
+
+--
+-- Name: memberships_updater_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY memberships
+    ADD CONSTRAINT memberships_updater_id_fkey FOREIGN KEY (updater_id) REFERENCES users(id);
 
 
 --
@@ -3020,6 +3357,14 @@ ALTER TABLE ONLY product_variants
 
 ALTER TABLE ONLY products
     ADD CONSTRAINT products_creator_id_fkey FOREIGN KEY (creator_id) REFERENCES users(id);
+
+
+--
+-- Name: products_manufacturer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY products
+    ADD CONSTRAINT products_manufacturer_id_fkey FOREIGN KEY (manufacturer_id) REFERENCES manufacturers(id);
 
 
 --
@@ -3269,3 +3614,19 @@ INSERT INTO schema_migrations (version) VALUES ('20130116041553');
 INSERT INTO schema_migrations (version) VALUES ('20130117013822');
 
 INSERT INTO schema_migrations (version) VALUES ('20130118003325');
+
+INSERT INTO schema_migrations (version) VALUES ('20130225003439');
+
+INSERT INTO schema_migrations (version) VALUES ('20130225003440');
+
+INSERT INTO schema_migrations (version) VALUES ('20130225010914');
+
+INSERT INTO schema_migrations (version) VALUES ('20130326235726');
+
+INSERT INTO schema_migrations (version) VALUES ('20130326235727');
+
+INSERT INTO schema_migrations (version) VALUES ('20130327002810');
+
+INSERT INTO schema_migrations (version) VALUES ('20130328012957');
+
+INSERT INTO schema_migrations (version) VALUES ('20130702003629');

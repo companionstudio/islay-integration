@@ -1,5 +1,3 @@
-Islay::Engine.config.integrate_shop_and_blog = true
-
 ImageAssetProcessor.config do
   version(:large) do |img|
     img.resize!(400, 400)
