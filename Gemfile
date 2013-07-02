@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'pg'
+ruby "1.9.3"
 
 gem 'spooky_core', :git => "git@github.com:spookandpuff/spooky-core.git"
 
@@ -14,12 +14,14 @@ group :assets do
 end
 
 group :test, :development do
-  gem 'rspec-rails',        "~> 2.12.2"
-  gem 'factory_girl_rails', "~> 4.2.1"
-  gem "ffaker",             "~> 1.15.0"
+  gem 'rspec-rails',        "2.13.2"
+  gem 'factory_girl_rails', "4.2.1"
+  gem "ffaker",             "1.16.1"
 end
 
 group :test do
-  gem "capybara",      "~> 1.1.2"
-  gem "poltergeist",   "~> 1.0.2"
+  gem "capybara",      "2.1.0"
+  gem "poltergeist",   "1.3.0"
+  gem 'vcr',           "2.5.0"
+  gem 'webmock',       "1.12.3"
 end
