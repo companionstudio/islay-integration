@@ -1,0 +1,26 @@
+= render_cell(:basket, :short)
+
+%ul
+  - @products.each do |product|
+    %li
+      %h2= product.name
+      - if product.related_promotions?
+        %ul.promotions
+          - product.related_promotions.each do |p|
+            %li= p.summary_html(:specific)
+            
+      %ul
+        - product.current_skus.each do |sku|
+          %li
+            %h3= sku.short_desc
+            - if sku.for_sale?
+              = sku.single_price
+              - if sku.in_stock?
+                = form_tag(path(:order_basket_add)) do
+                  = hidden_field_tag(:sku_id, sku.id)
+                  = hidden_field_tag(:quantity, 1)
+                  %button Add to Basket
+              - else
+                Sorry, out of stock
+
+= session.inspect

@@ -17,6 +17,8 @@ group :test, :development do
   gem 'rspec-rails',        "2.13.2"
   gem 'factory_girl_rails', "4.2.1"
   gem "ffaker",             "1.16.1"
+  gem "debugger",           "1.6.1"
+  gem "quiet_assets",       "1.0.2"
 end
 
 group :test do

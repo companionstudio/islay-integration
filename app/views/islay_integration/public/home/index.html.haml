@@ -1,0 +1,251 @@
+!!!
+%html
+  %head
+    %title Islay
+    %meta(http-equiv='Content-Type' content='text/html')
+    %meta(content="text/html;charset=UTF-8" http-equiv="Content-Type")
+    %link(href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700' rel='stylesheet' type='text/css')
+    %link(href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet")
+    %style
+      :sass
+        $sub-nav-color: #333333
+        $main-nav-width: 16em
+        $collapsed-nav-width: 3.5em
+
+        *
+          margin: 0
+          padding: 0
+          font-size: 1em
+          box-sizing: border-box
+
+        html, body
+          width: 100%
+          height: 100%
+
+        body
+          font-family: "Source Sans Pro"
+          font-size: 14px
+
+        li
+          list-style-type: none
+
+        .islay-layout
+          display: -webkit-box
+          box-orient: horizontal
+          width: 100%
+          height: 100%
+
+        .islay-main-content
+          display: -webkit-box
+          -webkit-box-flex: 1
+
+        .islay-nav
+          display: -webkit-box
+          -webkit-box-flex: 0
+
+        .islay-nav
+          background-color: $sub-nav-color
+          color: white
+          width: $main-nav-width
+          position: relative
+
+          a
+            color: white
+            text-decoration: none
+
+          .current
+            border-radius: 0.1em
+            background: #1D86BF
+            border: 0.1em solid #23A1E6
+
+        .islay-main-nav
+          background: #232323
+          width: $collapsed-nav-width
+          height: 100%
+          position: absolute
+          left: 0
+          top: 0
+          z-index: 2
+
+          strong
+            font-weight: normal
+
+          li
+            position: relative
+
+            &:hover ul
+              display: block
+
+          [class^="icon-"],
+          [class*=" icon-"]
+            text-align: center
+            float: left
+            width: 1.2em
+            font-size: 1.4em
+            margin-right: 0.4em
+            margin-top: -0.1em
+
+          .sub-nav
+            display: none
+
+            a
+              background-color: $sub-nav-color
+
+          .main-entry,
+          .sub-entry,
+          .global-search
+            font-size: 1.15em
+            height: 2.4em
+            display: block
+
+          .main-entry
+            padding: 0.6em 0 0 0.6em
+
+          .sub-entry
+            padding: 0.6em 0 0 2.8em
+
+          .current
+            margin: 0 0.4em
+            padding-left: 0.2em
+
+          .global-search input
+            border-width: 0
+            padding: 0.2em 0.6em
+            background: white
+            font-size: 0.8em
+            border-radius: 0.2em
+            width: $main-nav-width - 0.3em
+            outline: none
+
+        // Sub Navigation
+        .islay-sub-nav
+          position: absolute
+          left: $collapsed-nav-width
+          top: 0
+          width: 16em - 3.5em
+          height: 100%
+          z-index: 1
+
+          a
+            font-size: 1.15em
+            height: 2.4em
+            padding: 0.6em 0 0 0.8em
+            display: block
+
+          .current
+            margin: 0 0.4em
+            padding-left: 0.4em
+
+        // Main Navigation states
+        .islay-main-nav
+          // Default state
+          .main-entry strong,
+          .global-search input
+            display: none
+        
+          // Open state
+          &.open
+          &:hover,
+            width: $main-nav-width
+
+            .main-entry strong,
+            .global-search input
+              display: block
+
+            .global-search 
+              background: #333333
+
+              .icon-search
+                display: none
+
+  %body
+    %div.islay-layout
+      %div.islay-nav
+        %ul.islay-main-nav
+          %li
+            %form.main-entry.global-search
+              %i.icon-search
+              %input(type='text')
+          %li
+            %a.main-entry.dashboard(href='/') 
+              %i.icon-home
+              %strong Dashboard
+          %li
+            %a.main-entry.reports(href='/reports') 
+              %i.icon-bar-chart
+              %strong Reports
+            %ul.sub-nav
+              %li
+                %a.sub-entry(href='/reports/shop') Shop
+          %li
+            %a.main-entry.weblog(href='/weblog') 
+              %i.icon-rss
+              %strong Weblog
+            %ul.sub-nav
+              %li
+                %a.sub-entry(href='/weblog') Overview
+              %li
+                %a.sub-entry(href='/weblog/entries') Entries
+              %li
+                %a.sub-entry(href='/weblog/categories') Categories
+              %li
+                %a.sub-entry(href='/weblog/comments') Comments
+          %li
+            %a.main-entry.products(href='/products') 
+              %i.icon-rocket
+              %strong Products
+            %ul.sub-nav
+              %li
+                %a.sub-entry(href='/products') Overview
+              %li
+                %a.sub-entry(href='/products/pending') Pending Orders
+          %li
+            %a.main-entry.current(href='/orders') 
+              %i.icon-shopping-cart
+              %strong Orders
+            %ul.sub-nav
+              %li
+                %a.sub-entry(href='/products') Overview
+              %li
+                %a.sub-entry(href='/products/pending') Pending Orders
+          %li
+            %a.main-entry.contents(href='/contents') 
+              %i.icon-pencil
+              %strong Contents
+            %ul.sub-nav
+              %li
+                %a.sub-entry(href='/products') Overview
+              %li
+                %a.sub-entry(href='/products/pending') Pending Orders
+          %li
+            %a.main-entry.assets(href='/assets') 
+              %i.icon-picture
+              %strong Assets
+            %ul.sub-nav
+              %li
+                %a.sub-entry(href='/products') Overview
+              %li
+                %a.sub-entry(href='/products/pending') Pending Orders
+          %li
+            %a.main-entry.config(href='/config') 
+              %i.icon-cog
+              %strong Configuration
+            %ul.sub-nav
+              %li
+                %a.sub-entry(href='/config/users') Users
+              %li
+                %a.sub-entry(href='/products/pending') Pending Orders
+
+        %ul.islay-sub-nav
+          %li
+            %a(href='/orders/overview') Overview
+          %li
+            %a.current(href='/orders/pending') Pending Orders
+          %li
+            %a(href='/orders/processing') Processing
+          %li
+            %a(href='/orders/all') All Orders
+
+      %div.islay-main-content
+        %p What!
+

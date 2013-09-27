@@ -628,82 +628,6 @@ ALTER SEQUENCE blog_tags_id_seq OWNED BY blog_tags.id;
 
 
 --
--- Name: credit_card_payments; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE credit_card_payments (
-    id integer NOT NULL,
-    order_id integer NOT NULL,
-    successful boolean DEFAULT false NOT NULL,
-    amount double precision NOT NULL,
-    first_name character varying(200) NOT NULL,
-    last_name character varying(200) NOT NULL,
-    number character varying(25) NOT NULL,
-    month bigint NOT NULL,
-    year bigint NOT NULL,
-    gateway_id character varying(60) NOT NULL,
-    gateway_expiry timestamp without time zone NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    card_type character varying(30) DEFAULT NULL::character varying NOT NULL
-);
-
-
---
--- Name: credit_card_payments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE credit_card_payments_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: credit_card_payments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE credit_card_payments_id_seq OWNED BY credit_card_payments.id;
-
-
---
--- Name: credit_card_transactions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE credit_card_transactions (
-    id integer NOT NULL,
-    credit_card_payment_id integer NOT NULL,
-    transaction_id character varying(60) NOT NULL,
-    transaction_type character varying(50) NOT NULL,
-    amount double precision NOT NULL,
-    currency character varying(4) DEFAULT 'AUD'::character varying NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: credit_card_transactions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE credit_card_transactions_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: credit_card_transactions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE credit_card_transactions_id_seq OWNED BY credit_card_transactions.id;
-
-
---
 -- Name: features; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -779,6 +703,222 @@ CREATE SEQUENCE groups_id_seq
 --
 
 ALTER SEQUENCE groups_id_seq OWNED BY groups.id;
+
+
+--
+-- Name: legacy_credit_card_payments; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE legacy_credit_card_payments (
+    id integer NOT NULL,
+    order_id integer NOT NULL,
+    successful boolean DEFAULT false NOT NULL,
+    amount double precision NOT NULL,
+    first_name character varying(200) NOT NULL,
+    last_name character varying(200) NOT NULL,
+    number character varying(25) NOT NULL,
+    month bigint NOT NULL,
+    year bigint NOT NULL,
+    gateway_id character varying(60) NOT NULL,
+    gateway_expiry timestamp without time zone NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    card_type character varying(30) DEFAULT NULL::character varying NOT NULL
+);
+
+
+--
+-- Name: legacy_credit_card_payments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE legacy_credit_card_payments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: legacy_credit_card_payments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE legacy_credit_card_payments_id_seq OWNED BY legacy_credit_card_payments.id;
+
+
+--
+-- Name: legacy_credit_card_transactions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE legacy_credit_card_transactions (
+    id integer NOT NULL,
+    credit_card_payment_id integer NOT NULL,
+    transaction_id character varying(60) NOT NULL,
+    transaction_type character varying(50) NOT NULL,
+    amount double precision NOT NULL,
+    currency character varying(4) DEFAULT 'AUD'::character varying NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: legacy_credit_card_transactions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE legacy_credit_card_transactions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: legacy_credit_card_transactions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE legacy_credit_card_transactions_id_seq OWNED BY legacy_credit_card_transactions.id;
+
+
+--
+-- Name: legacy_order_items; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE legacy_order_items (
+    id integer NOT NULL,
+    order_id integer NOT NULL,
+    sku_id integer NOT NULL,
+    quantity integer NOT NULL,
+    type character varying(50) NOT NULL,
+    batch_size bigint,
+    batch_price double precision,
+    original_price double precision NOT NULL,
+    original_total double precision NOT NULL,
+    discount double precision NOT NULL,
+    adjusted_price double precision NOT NULL,
+    total double precision NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: legacy_orders; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE legacy_orders (
+    id integer NOT NULL,
+    person_id integer,
+    status character varying(50) NOT NULL,
+    reference character varying(11) NOT NULL,
+    name character varying(200) NOT NULL,
+    phone character varying(50),
+    email character varying(200) NOT NULL,
+    is_gift boolean,
+    shipping_name character varying(200),
+    gift_message character varying(4000),
+    billing_street character varying(200) NOT NULL,
+    billing_city character varying(200) NOT NULL,
+    billing_state character varying(200) NOT NULL,
+    billing_postcode character varying(25) NOT NULL,
+    billing_country character varying(2) NOT NULL,
+    shipping_street character varying(200),
+    shipping_city character varying(200),
+    shipping_state character varying(200),
+    shipping_postcode character varying(25),
+    shipping_country character varying(2),
+    shipping_instructions character varying(4000),
+    use_shipping_address boolean NOT NULL,
+    original_product_total double precision NOT NULL,
+    product_total double precision NOT NULL,
+    original_total double precision NOT NULL,
+    total double precision NOT NULL,
+    discount double precision NOT NULL,
+    currency character varying(4) NOT NULL,
+    creator_id integer,
+    updater_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    terms tsvector,
+    tracking_reference character varying(30),
+    billing_company character varying(200),
+    shipping_company character varying(200),
+    shipping_total double precision,
+    original_shipping_total double precision
+);
+
+
+--
+-- Name: legacy_sku_price_logs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE legacy_sku_price_logs (
+    id integer NOT NULL,
+    sku_id integer NOT NULL,
+    price_before real,
+    price_after real,
+    batch_size_before bigint,
+    batch_size_after bigint,
+    batch_price_before real,
+    batch_price_after real,
+    creator_id integer,
+    updater_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: legacy_sku_price_logs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE legacy_sku_price_logs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: legacy_sku_price_logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE legacy_sku_price_logs_id_seq OWNED BY legacy_sku_price_logs.id;
+
+
+--
+-- Name: legacy_skus; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE legacy_skus (
+    id integer NOT NULL,
+    product_id integer NOT NULL,
+    product_variant_id integer,
+    "position" integer NOT NULL,
+    short_desc character varying(400) NOT NULL,
+    name character varying(200),
+    weight integer,
+    volume integer,
+    size character varying(50),
+    metadata hstore,
+    price double precision NOT NULL,
+    batch_size bigint,
+    batch_price double precision,
+    stock_level bigint NOT NULL,
+    status character varying(20) NOT NULL,
+    purchase_limiting boolean NOT NULL,
+    purchase_limit bigint,
+    published boolean NOT NULL,
+    published_at timestamp without time zone,
+    first_published_at timestamp without time zone,
+    creator_id integer NOT NULL,
+    updater_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    terms tsvector
+);
 
 
 --
@@ -891,24 +1031,119 @@ ALTER SEQUENCE memberships_id_seq OWNED BY memberships.id;
 
 
 --
+-- Name: order_adjustments; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE order_adjustments (
+    id integer NOT NULL,
+    order_id integer NOT NULL,
+    source character varying(255) NOT NULL,
+    adjustment numeric(14,7) DEFAULT 0 NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: order_adjustments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE order_adjustments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: order_adjustments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE order_adjustments_id_seq OWNED BY order_adjustments.id;
+
+
+--
+-- Name: order_item_adjustments; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE order_item_adjustments (
+    id integer NOT NULL,
+    order_item_id integer NOT NULL,
+    kind character varying(255) NOT NULL,
+    source character varying(255) NOT NULL,
+    quantity integer NOT NULL,
+    adjustment numeric(14,7) DEFAULT 0 NOT NULL
+);
+
+
+--
+-- Name: order_item_adjustments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE order_item_adjustments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: order_item_adjustments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE order_item_adjustments_id_seq OWNED BY order_item_adjustments.id;
+
+
+--
+-- Name: order_item_components; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE order_item_components (
+    id integer NOT NULL,
+    order_item_id integer NOT NULL,
+    kind character varying(255) DEFAULT 'regular'::character varying NOT NULL,
+    quantity integer DEFAULT 0 NOT NULL,
+    price numeric(14,7) DEFAULT 0 NOT NULL,
+    total numeric(14,7) DEFAULT 0 NOT NULL
+);
+
+
+--
+-- Name: order_item_components_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE order_item_components_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: order_item_components_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE order_item_components_id_seq OWNED BY order_item_components.id;
+
+
+--
 -- Name: order_items; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE order_items (
     id integer NOT NULL,
     order_id integer NOT NULL,
-    sku_id integer NOT NULL,
+    sku_id integer,
     quantity integer NOT NULL,
     type character varying(50) DEFAULT 'regular'::character varying NOT NULL,
-    batch_size bigint,
-    batch_price double precision,
-    original_price double precision NOT NULL,
-    original_total double precision NOT NULL,
-    discount double precision DEFAULT 0 NOT NULL,
-    adjusted_price double precision NOT NULL,
-    total double precision NOT NULL,
+    pre_discount_total numeric(14,7) NOT NULL,
+    total numeric(14,7) NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    service_id integer
 );
 
 
@@ -968,6 +1203,46 @@ ALTER SEQUENCE order_logs_id_seq OWNED BY order_logs.id;
 
 
 --
+-- Name: order_payments; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE order_payments (
+    id integer NOT NULL,
+    order_id integer NOT NULL,
+    provider_name character varying(255) NOT NULL,
+    provider_token character varying(255) NOT NULL,
+    provider_expiry timestamp without time zone,
+    status character varying(255) NOT NULL,
+    name character varying(255),
+    number character varying(255) NOT NULL,
+    expiration_month integer NOT NULL,
+    expiration_year integer NOT NULL,
+    card_type character varying(255) NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: order_payments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE order_payments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: order_payments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE order_payments_id_seq OWNED BY order_payments.id;
+
+
+--
 -- Name: orders; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -994,13 +1269,11 @@ CREATE TABLE orders (
     shipping_country character varying(2),
     shipping_instructions character varying(4000),
     use_shipping_address boolean DEFAULT false NOT NULL,
-    original_product_total double precision NOT NULL,
-    product_total double precision NOT NULL,
-    original_shipping_total double precision NOT NULL,
-    shipping_total double precision NOT NULL,
-    original_total double precision NOT NULL,
-    total double precision NOT NULL,
-    discount double precision DEFAULT 0 NOT NULL,
+    original_product_total numeric(14,7) NOT NULL,
+    product_total numeric(14,7) NOT NULL,
+    original_total numeric(14,7) NOT NULL,
+    total numeric(14,7) NOT NULL,
+    discount numeric(14,7) DEFAULT 0 NOT NULL,
     currency character varying(4) DEFAULT 'AUD'::character varying NOT NULL,
     creator_id integer,
     updater_id integer,
@@ -1009,7 +1282,9 @@ CREATE TABLE orders (
     terms tsvector,
     tracking_reference character varying(30),
     billing_company character varying(200),
-    shipping_company character varying(200)
+    shipping_company character varying(200),
+    increase numeric(14,7),
+    on_hold boolean DEFAULT false NOT NULL
 );
 
 
@@ -1365,6 +1640,40 @@ ALTER SEQUENCE products_id_seq OWNED BY products.id;
 
 
 --
+-- Name: promotion_codes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE promotion_codes (
+    id integer NOT NULL,
+    promotion_condition_id integer NOT NULL,
+    code character varying(200) NOT NULL,
+    redeemed_at timestamp without time zone,
+    order_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: promotion_codes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE promotion_codes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: promotion_codes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE promotion_codes_id_seq OWNED BY promotion_codes.id;
+
+
+--
 -- Name: promotion_conditions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1440,12 +1749,15 @@ CREATE TABLE promotions (
     description character varying(4000),
     active boolean DEFAULT false NOT NULL,
     start_at timestamp without time zone NOT NULL,
-    end_at timestamp without time zone NOT NULL,
+    end_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     terms tsvector,
     application_limit integer,
-    slug character varying(200)
+    slug character varying(200),
+    publish_application_limit boolean DEFAULT true,
+    creator_id integer NOT NULL,
+    updater_id integer NOT NULL
 );
 
 
@@ -1475,6 +1787,76 @@ ALTER SEQUENCE promotions_id_seq OWNED BY promotions.id;
 CREATE TABLE schema_migrations (
     version character varying(255) NOT NULL
 );
+
+
+--
+-- Name: service_price_points; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE service_price_points (
+    id integer NOT NULL,
+    service_id integer NOT NULL,
+    price numeric(14,7) NOT NULL,
+    current boolean DEFAULT false NOT NULL,
+    valid_from timestamp without time zone NOT NULL,
+    valid_to timestamp without time zone,
+    creator_id integer NOT NULL,
+    updater_id integer NOT NULL
+);
+
+
+--
+-- Name: service_price_points_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE service_price_points_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: service_price_points_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE service_price_points_id_seq OWNED BY service_price_points.id;
+
+
+--
+-- Name: services; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE services (
+    id integer NOT NULL,
+    name character varying(200) NOT NULL,
+    key character varying(20),
+    deletable boolean DEFAULT true NOT NULL,
+    creator_id integer NOT NULL,
+    updater_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: services_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE services_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: services_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE services_id_seq OWNED BY services.id;
 
 
 --
@@ -1541,30 +1923,28 @@ ALTER SEQUENCE sku_blog_entries_id_seq OWNED BY sku_blog_entries.id;
 
 
 --
--- Name: sku_price_logs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: sku_price_points; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE TABLE sku_price_logs (
+CREATE TABLE sku_price_points (
     id integer NOT NULL,
     sku_id integer NOT NULL,
-    price_before real,
-    price_after real,
-    batch_size_before bigint,
-    batch_size_after bigint,
-    batch_price_before real,
-    batch_price_after real,
-    creator_id integer,
-    updater_id integer,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    volume integer,
+    price numeric(14,7) NOT NULL,
+    mode character varying(15) NOT NULL,
+    current boolean DEFAULT false NOT NULL,
+    valid_from timestamp without time zone NOT NULL,
+    valid_to timestamp without time zone,
+    creator_id integer NOT NULL,
+    updater_id integer NOT NULL
 );
 
 
 --
--- Name: sku_price_logs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: sku_price_points_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE sku_price_logs_id_seq
+CREATE SEQUENCE sku_price_points_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1573,10 +1953,10 @@ CREATE SEQUENCE sku_price_logs_id_seq
 
 
 --
--- Name: sku_price_logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: sku_price_points_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE sku_price_logs_id_seq OWNED BY sku_price_logs.id;
+ALTER SEQUENCE sku_price_points_id_seq OWNED BY sku_price_points.id;
 
 
 --
@@ -1630,9 +2010,6 @@ CREATE TABLE skus (
     volume integer,
     size character varying(50),
     metadata hstore,
-    price double precision NOT NULL,
-    batch_size bigint,
-    batch_price double precision,
     stock_level bigint DEFAULT 1 NOT NULL,
     status character varying(20) DEFAULT 'for_sale'::character varying NOT NULL,
     purchase_limiting boolean DEFAULT false NOT NULL,
@@ -1679,7 +2056,8 @@ CREATE TABLE users (
     reset_password_token character varying(200),
     reset_password_sent_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    immutable boolean DEFAULT false NOT NULL
 );
 
 
@@ -1776,20 +2154,6 @@ ALTER TABLE ONLY blog_tags ALTER COLUMN id SET DEFAULT nextval('blog_tags_id_seq
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY credit_card_payments ALTER COLUMN id SET DEFAULT nextval('credit_card_payments_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY credit_card_transactions ALTER COLUMN id SET DEFAULT nextval('credit_card_transactions_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
 ALTER TABLE ONLY features ALTER COLUMN id SET DEFAULT nextval('features_id_seq'::regclass);
 
 
@@ -1798,6 +2162,27 @@ ALTER TABLE ONLY features ALTER COLUMN id SET DEFAULT nextval('features_id_seq':
 --
 
 ALTER TABLE ONLY groups ALTER COLUMN id SET DEFAULT nextval('groups_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY legacy_credit_card_payments ALTER COLUMN id SET DEFAULT nextval('legacy_credit_card_payments_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY legacy_credit_card_transactions ALTER COLUMN id SET DEFAULT nextval('legacy_credit_card_transactions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY legacy_sku_price_logs ALTER COLUMN id SET DEFAULT nextval('legacy_sku_price_logs_id_seq'::regclass);
 
 
 --
@@ -1825,6 +2210,27 @@ ALTER TABLE ONLY memberships ALTER COLUMN id SET DEFAULT nextval('memberships_id
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY order_adjustments ALTER COLUMN id SET DEFAULT nextval('order_adjustments_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY order_item_adjustments ALTER COLUMN id SET DEFAULT nextval('order_item_adjustments_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY order_item_components ALTER COLUMN id SET DEFAULT nextval('order_item_components_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY order_items ALTER COLUMN id SET DEFAULT nextval('order_items_id_seq'::regclass);
 
 
@@ -1833,6 +2239,13 @@ ALTER TABLE ONLY order_items ALTER COLUMN id SET DEFAULT nextval('order_items_id
 --
 
 ALTER TABLE ONLY order_logs ALTER COLUMN id SET DEFAULT nextval('order_logs_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY order_payments ALTER COLUMN id SET DEFAULT nextval('order_payments_id_seq'::regclass);
 
 
 --
@@ -1909,6 +2322,13 @@ ALTER TABLE ONLY products ALTER COLUMN id SET DEFAULT nextval('products_id_seq':
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY promotion_codes ALTER COLUMN id SET DEFAULT nextval('promotion_codes_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY promotion_conditions ALTER COLUMN id SET DEFAULT nextval('promotion_conditions_id_seq'::regclass);
 
 
@@ -1930,6 +2350,20 @@ ALTER TABLE ONLY promotions ALTER COLUMN id SET DEFAULT nextval('promotions_id_s
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY service_price_points ALTER COLUMN id SET DEFAULT nextval('service_price_points_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY services ALTER COLUMN id SET DEFAULT nextval('services_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY sku_assets ALTER COLUMN id SET DEFAULT nextval('sku_assets_id_seq'::regclass);
 
 
@@ -1944,7 +2378,7 @@ ALTER TABLE ONLY sku_blog_entries ALTER COLUMN id SET DEFAULT nextval('sku_blog_
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY sku_price_logs ALTER COLUMN id SET DEFAULT nextval('sku_price_logs_id_seq'::regclass);
+ALTER TABLE ONLY sku_price_points ALTER COLUMN id SET DEFAULT nextval('sku_price_points_id_seq'::regclass);
 
 
 --
@@ -2052,7 +2486,7 @@ ALTER TABLE ONLY blog_tags
 -- Name: credit_card_payments_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
-ALTER TABLE ONLY credit_card_payments
+ALTER TABLE ONLY legacy_credit_card_payments
     ADD CONSTRAINT credit_card_payments_pkey PRIMARY KEY (id);
 
 
@@ -2060,7 +2494,7 @@ ALTER TABLE ONLY credit_card_payments
 -- Name: credit_card_transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
-ALTER TABLE ONLY credit_card_transactions
+ALTER TABLE ONLY legacy_credit_card_transactions
     ADD CONSTRAINT credit_card_transactions_pkey PRIMARY KEY (id);
 
 
@@ -2078,6 +2512,30 @@ ALTER TABLE ONLY features
 
 ALTER TABLE ONLY groups
     ADD CONSTRAINT groups_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: legacy_order_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY legacy_order_items
+    ADD CONSTRAINT legacy_order_items_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: legacy_orders_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY legacy_orders
+    ADD CONSTRAINT legacy_orders_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: legacy_skus_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY legacy_skus
+    ADD CONSTRAINT legacy_skus_pkey PRIMARY KEY (id);
 
 
 --
@@ -2105,6 +2563,30 @@ ALTER TABLE ONLY memberships
 
 
 --
+-- Name: order_adjustments_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY order_adjustments
+    ADD CONSTRAINT order_adjustments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: order_item_adjustments_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY order_item_adjustments
+    ADD CONSTRAINT order_item_adjustments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: order_item_components_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY order_item_components
+    ADD CONSTRAINT order_item_components_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: order_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2118,6 +2600,14 @@ ALTER TABLE ONLY order_items
 
 ALTER TABLE ONLY order_logs
     ADD CONSTRAINT order_logs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: order_payments_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY order_payments
+    ADD CONSTRAINT order_payments_pkey PRIMARY KEY (id);
 
 
 --
@@ -2201,6 +2691,14 @@ ALTER TABLE ONLY products
 
 
 --
+-- Name: promotion_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY promotion_codes
+    ADD CONSTRAINT promotion_codes_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: promotion_conditions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2225,6 +2723,22 @@ ALTER TABLE ONLY promotions
 
 
 --
+-- Name: service_price_points_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY service_price_points
+    ADD CONSTRAINT service_price_points_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: services_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY services
+    ADD CONSTRAINT services_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: sku_assets_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2244,8 +2758,16 @@ ALTER TABLE ONLY sku_blog_entries
 -- Name: sku_price_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
-ALTER TABLE ONLY sku_price_logs
+ALTER TABLE ONLY legacy_sku_price_logs
     ADD CONSTRAINT sku_price_logs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: sku_price_points_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY sku_price_points
+    ADD CONSTRAINT sku_price_points_pkey PRIMARY KEY (id);
 
 
 --
@@ -2273,6 +2795,664 @@ ALTER TABLE ONLY users
 
 
 --
+-- Name: fk__applied_promotions_promotion_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__applied_promotions_promotion_id ON applied_promotions USING btree (promotion_id);
+
+
+--
+-- Name: fk__asset_groups_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__asset_groups_creator_id ON asset_groups USING btree (creator_id);
+
+
+--
+-- Name: fk__asset_groups_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__asset_groups_updater_id ON asset_groups USING btree (updater_id);
+
+
+--
+-- Name: fk__asset_taggings_asset_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__asset_taggings_asset_id ON asset_taggings USING btree (asset_id);
+
+
+--
+-- Name: fk__asset_taggings_asset_tag_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__asset_taggings_asset_tag_id ON asset_taggings USING btree (asset_tag_id);
+
+
+--
+-- Name: fk__assets_asset_group_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__assets_asset_group_id ON assets USING btree (asset_group_id);
+
+
+--
+-- Name: fk__assets_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__assets_creator_id ON assets USING btree (creator_id);
+
+
+--
+-- Name: fk__assets_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__assets_updater_id ON assets USING btree (updater_id);
+
+
+--
+-- Name: fk__blog_assets_asset_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__blog_assets_asset_id ON blog_assets USING btree (asset_id);
+
+
+--
+-- Name: fk__blog_assets_blog_entry_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__blog_assets_blog_entry_id ON blog_assets USING btree (blog_entry_id);
+
+
+--
+-- Name: fk__blog_comments_blog_entry_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__blog_comments_blog_entry_id ON blog_comments USING btree (blog_entry_id);
+
+
+--
+-- Name: fk__blog_entries_author_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__blog_entries_author_id ON blog_entries USING btree (author_id);
+
+
+--
+-- Name: fk__blog_entries_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__blog_entries_creator_id ON blog_entries USING btree (creator_id);
+
+
+--
+-- Name: fk__blog_entries_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__blog_entries_updater_id ON blog_entries USING btree (updater_id);
+
+
+--
+-- Name: fk__blog_taggings_blog_entry_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__blog_taggings_blog_entry_id ON blog_taggings USING btree (blog_entry_id);
+
+
+--
+-- Name: fk__blog_taggings_blog_tag_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__blog_taggings_blog_tag_id ON blog_taggings USING btree (blog_tag_id);
+
+
+--
+-- Name: fk__features_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__features_creator_id ON features USING btree (creator_id);
+
+
+--
+-- Name: fk__features_page_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__features_page_id ON features USING btree (page_id);
+
+
+--
+-- Name: fk__features_primary_asset_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__features_primary_asset_id ON features USING btree (primary_asset_id);
+
+
+--
+-- Name: fk__features_secondary_asset_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__features_secondary_asset_id ON features USING btree (secondary_asset_id);
+
+
+--
+-- Name: fk__features_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__features_updater_id ON features USING btree (updater_id);
+
+
+--
+-- Name: fk__groups_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__groups_creator_id ON groups USING btree (creator_id);
+
+
+--
+-- Name: fk__groups_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__groups_updater_id ON groups USING btree (updater_id);
+
+
+--
+-- Name: fk__legacy_credit_card_payments_order_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__legacy_credit_card_payments_order_id ON legacy_credit_card_payments USING btree (order_id);
+
+
+--
+-- Name: fk__legacy_credit_card_transactions_credit_card_payment_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__legacy_credit_card_transactions_credit_card_payment_id ON legacy_credit_card_transactions USING btree (credit_card_payment_id);
+
+
+--
+-- Name: fk__legacy_sku_price_logs_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__legacy_sku_price_logs_creator_id ON legacy_sku_price_logs USING btree (creator_id);
+
+
+--
+-- Name: fk__legacy_sku_price_logs_sku_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__legacy_sku_price_logs_sku_id ON legacy_sku_price_logs USING btree (sku_id);
+
+
+--
+-- Name: fk__legacy_sku_price_logs_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__legacy_sku_price_logs_updater_id ON legacy_sku_price_logs USING btree (updater_id);
+
+
+--
+-- Name: fk__manufacturer_assets_asset_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__manufacturer_assets_asset_id ON manufacturer_assets USING btree (asset_id);
+
+
+--
+-- Name: fk__manufacturer_assets_manufacturer_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__manufacturer_assets_manufacturer_id ON manufacturer_assets USING btree (manufacturer_id);
+
+
+--
+-- Name: fk__manufacturers_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__manufacturers_creator_id ON manufacturers USING btree (creator_id);
+
+
+--
+-- Name: fk__manufacturers_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__manufacturers_updater_id ON manufacturers USING btree (updater_id);
+
+
+--
+-- Name: fk__memberships_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__memberships_creator_id ON memberships USING btree (creator_id);
+
+
+--
+-- Name: fk__memberships_group_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__memberships_group_id ON memberships USING btree (group_id);
+
+
+--
+-- Name: fk__memberships_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__memberships_person_id ON memberships USING btree (person_id);
+
+
+--
+-- Name: fk__memberships_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__memberships_updater_id ON memberships USING btree (updater_id);
+
+
+--
+-- Name: fk__order_adjustments_order_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__order_adjustments_order_id ON order_adjustments USING btree (order_id);
+
+
+--
+-- Name: fk__order_item_adjustments_order_item_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__order_item_adjustments_order_item_id ON order_item_adjustments USING btree (order_item_id);
+
+
+--
+-- Name: fk__order_item_components_order_item_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__order_item_components_order_item_id ON order_item_components USING btree (order_item_id);
+
+
+--
+-- Name: fk__order_items_order_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__order_items_order_id ON order_items USING btree (order_id);
+
+
+--
+-- Name: fk__order_items_service_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__order_items_service_id ON order_items USING btree (service_id);
+
+
+--
+-- Name: fk__order_items_sku_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__order_items_sku_id ON order_items USING btree (sku_id);
+
+
+--
+-- Name: fk__order_logs_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__order_logs_creator_id ON order_logs USING btree (creator_id);
+
+
+--
+-- Name: fk__order_logs_order_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__order_logs_order_id ON order_logs USING btree (order_id);
+
+
+--
+-- Name: fk__order_logs_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__order_logs_updater_id ON order_logs USING btree (updater_id);
+
+
+--
+-- Name: fk__order_payments_order_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__order_payments_order_id ON order_payments USING btree (order_id);
+
+
+--
+-- Name: fk__orders_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__orders_creator_id ON orders USING btree (creator_id);
+
+
+--
+-- Name: fk__orders_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__orders_person_id ON orders USING btree (person_id);
+
+
+--
+-- Name: fk__orders_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__orders_updater_id ON orders USING btree (updater_id);
+
+
+--
+-- Name: fk__page_assets_asset_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__page_assets_asset_id ON page_assets USING btree (asset_id);
+
+
+--
+-- Name: fk__page_assets_page_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__page_assets_page_id ON page_assets USING btree (page_id);
+
+
+--
+-- Name: fk__pages_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__pages_creator_id ON pages USING btree (creator_id);
+
+
+--
+-- Name: fk__pages_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__pages_updater_id ON pages USING btree (updater_id);
+
+
+--
+-- Name: fk__product_assets_asset_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__product_assets_asset_id ON product_assets USING btree (asset_id);
+
+
+--
+-- Name: fk__product_assets_product_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__product_assets_product_id ON product_assets USING btree (product_id);
+
+
+--
+-- Name: fk__product_categories_asset_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__product_categories_asset_id ON product_categories USING btree (asset_id);
+
+
+--
+-- Name: fk__product_categories_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__product_categories_creator_id ON product_categories USING btree (creator_id);
+
+
+--
+-- Name: fk__product_categories_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__product_categories_updater_id ON product_categories USING btree (updater_id);
+
+
+--
+-- Name: fk__product_ranges_asset_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__product_ranges_asset_id ON product_ranges USING btree (asset_id);
+
+
+--
+-- Name: fk__product_ranges_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__product_ranges_creator_id ON product_ranges USING btree (creator_id);
+
+
+--
+-- Name: fk__product_ranges_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__product_ranges_updater_id ON product_ranges USING btree (updater_id);
+
+
+--
+-- Name: fk__product_variant_assets_asset_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__product_variant_assets_asset_id ON product_variant_assets USING btree (asset_id);
+
+
+--
+-- Name: fk__product_variant_assets_product_variant_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__product_variant_assets_product_variant_id ON product_variant_assets USING btree (product_variant_id);
+
+
+--
+-- Name: fk__product_variants_product_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__product_variants_product_id ON product_variants USING btree (product_id);
+
+
+--
+-- Name: fk__products_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__products_creator_id ON products USING btree (creator_id);
+
+
+--
+-- Name: fk__products_manufacturer_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__products_manufacturer_id ON products USING btree (manufacturer_id);
+
+
+--
+-- Name: fk__products_product_category_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__products_product_category_id ON products USING btree (product_category_id);
+
+
+--
+-- Name: fk__products_product_range_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__products_product_range_id ON products USING btree (product_range_id);
+
+
+--
+-- Name: fk__products_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__products_updater_id ON products USING btree (updater_id);
+
+
+--
+-- Name: fk__promotion_codes_order_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__promotion_codes_order_id ON promotion_codes USING btree (order_id);
+
+
+--
+-- Name: fk__promotion_codes_promotion_condition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__promotion_codes_promotion_condition_id ON promotion_codes USING btree (promotion_condition_id);
+
+
+--
+-- Name: fk__promotion_conditions_promotion_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__promotion_conditions_promotion_id ON promotion_conditions USING btree (promotion_id);
+
+
+--
+-- Name: fk__promotion_effects_promotion_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__promotion_effects_promotion_id ON promotion_effects USING btree (promotion_id);
+
+
+--
+-- Name: fk__promotions_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__promotions_creator_id ON promotions USING btree (creator_id);
+
+
+--
+-- Name: fk__promotions_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__promotions_updater_id ON promotions USING btree (updater_id);
+
+
+--
+-- Name: fk__service_price_points_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__service_price_points_creator_id ON service_price_points USING btree (creator_id);
+
+
+--
+-- Name: fk__service_price_points_service_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__service_price_points_service_id ON service_price_points USING btree (service_id);
+
+
+--
+-- Name: fk__service_price_points_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__service_price_points_updater_id ON service_price_points USING btree (updater_id);
+
+
+--
+-- Name: fk__services_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__services_creator_id ON services USING btree (creator_id);
+
+
+--
+-- Name: fk__services_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__services_updater_id ON services USING btree (updater_id);
+
+
+--
+-- Name: fk__sku_assets_asset_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__sku_assets_asset_id ON sku_assets USING btree (asset_id);
+
+
+--
+-- Name: fk__sku_assets_sku_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__sku_assets_sku_id ON sku_assets USING btree (sku_id);
+
+
+--
+-- Name: fk__sku_blog_entries_blog_entry_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__sku_blog_entries_blog_entry_id ON sku_blog_entries USING btree (blog_entry_id);
+
+
+--
+-- Name: fk__sku_blog_entries_sku_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__sku_blog_entries_sku_id ON sku_blog_entries USING btree (sku_id);
+
+
+--
+-- Name: fk__sku_price_points_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__sku_price_points_creator_id ON sku_price_points USING btree (creator_id);
+
+
+--
+-- Name: fk__sku_price_points_sku_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__sku_price_points_sku_id ON sku_price_points USING btree (sku_id);
+
+
+--
+-- Name: fk__sku_price_points_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__sku_price_points_updater_id ON sku_price_points USING btree (updater_id);
+
+
+--
+-- Name: fk__sku_stock_logs_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__sku_stock_logs_creator_id ON sku_stock_logs USING btree (creator_id);
+
+
+--
+-- Name: fk__sku_stock_logs_sku_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__sku_stock_logs_sku_id ON sku_stock_logs USING btree (sku_id);
+
+
+--
+-- Name: fk__sku_stock_logs_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__sku_stock_logs_updater_id ON sku_stock_logs USING btree (updater_id);
+
+
+--
+-- Name: fk__skus_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__skus_creator_id ON skus USING btree (creator_id);
+
+
+--
+-- Name: fk__skus_product_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__skus_product_id ON skus USING btree (product_id);
+
+
+--
+-- Name: fk__skus_product_variant_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__skus_product_variant_id ON skus USING btree (product_variant_id);
+
+
+--
+-- Name: fk__skus_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fk__skus_updater_id ON skus USING btree (updater_id);
+
+
+--
 -- Name: index_applied_promotions_on_order_id_and_promotion_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2280,206 +3460,10 @@ CREATE UNIQUE INDEX index_applied_promotions_on_order_id_and_promotion_id ON app
 
 
 --
--- Name: index_applied_promotions_on_promotion_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_applied_promotions_on_promotion_id ON applied_promotions USING btree (promotion_id);
-
-
---
--- Name: index_asset_groups_on_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_asset_groups_on_creator_id ON asset_groups USING btree (creator_id);
-
-
---
--- Name: index_asset_groups_on_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_asset_groups_on_updater_id ON asset_groups USING btree (updater_id);
-
-
---
--- Name: index_asset_taggings_on_asset_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_asset_taggings_on_asset_id ON asset_taggings USING btree (asset_id);
-
-
---
--- Name: index_asset_taggings_on_asset_tag_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_asset_taggings_on_asset_tag_id ON asset_taggings USING btree (asset_tag_id);
-
-
---
--- Name: index_assets_on_asset_group_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_assets_on_asset_group_id ON assets USING btree (asset_group_id);
-
-
---
--- Name: index_assets_on_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_assets_on_creator_id ON assets USING btree (creator_id);
-
-
---
 -- Name: index_assets_on_name_and_type_and_asset_group_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX index_assets_on_name_and_type_and_asset_group_id ON assets USING btree (name, type, asset_group_id);
-
-
---
--- Name: index_assets_on_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_assets_on_updater_id ON assets USING btree (updater_id);
-
-
---
--- Name: index_blog_assets_on_asset_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_blog_assets_on_asset_id ON blog_assets USING btree (asset_id);
-
-
---
--- Name: index_blog_assets_on_blog_entry_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_blog_assets_on_blog_entry_id ON blog_assets USING btree (blog_entry_id);
-
-
---
--- Name: index_blog_comments_on_blog_entry_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_blog_comments_on_blog_entry_id ON blog_comments USING btree (blog_entry_id);
-
-
---
--- Name: index_blog_entries_on_author_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_blog_entries_on_author_id ON blog_entries USING btree (author_id);
-
-
---
--- Name: index_blog_entries_on_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_blog_entries_on_creator_id ON blog_entries USING btree (creator_id);
-
-
---
--- Name: index_blog_entries_on_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_blog_entries_on_updater_id ON blog_entries USING btree (updater_id);
-
-
---
--- Name: index_blog_taggings_on_blog_entry_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_blog_taggings_on_blog_entry_id ON blog_taggings USING btree (blog_entry_id);
-
-
---
--- Name: index_blog_taggings_on_blog_tag_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_blog_taggings_on_blog_tag_id ON blog_taggings USING btree (blog_tag_id);
-
-
---
--- Name: index_credit_card_payments_on_order_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_credit_card_payments_on_order_id ON credit_card_payments USING btree (order_id);
-
-
---
--- Name: index_credit_card_transactions_on_credit_card_payment_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_credit_card_transactions_on_credit_card_payment_id ON credit_card_transactions USING btree (credit_card_payment_id);
-
-
---
--- Name: index_features_on_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_features_on_creator_id ON features USING btree (creator_id);
-
-
---
--- Name: index_features_on_page_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_features_on_page_id ON features USING btree (page_id);
-
-
---
--- Name: index_features_on_primary_asset_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_features_on_primary_asset_id ON features USING btree (primary_asset_id);
-
-
---
--- Name: index_features_on_secondary_asset_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_features_on_secondary_asset_id ON features USING btree (secondary_asset_id);
-
-
---
--- Name: index_features_on_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_features_on_updater_id ON features USING btree (updater_id);
-
-
---
--- Name: index_groups_on_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_groups_on_creator_id ON groups USING btree (creator_id);
-
-
---
--- Name: index_groups_on_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_groups_on_updater_id ON groups USING btree (updater_id);
-
-
---
--- Name: index_manufacturer_assets_on_asset_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_manufacturer_assets_on_asset_id ON manufacturer_assets USING btree (asset_id);
-
-
---
--- Name: index_manufacturer_assets_on_manufacturer_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_manufacturer_assets_on_manufacturer_id ON manufacturer_assets USING btree (manufacturer_id);
-
-
---
--- Name: index_manufacturers_on_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_manufacturers_on_creator_id ON manufacturers USING btree (creator_id);
 
 
 --
@@ -2497,178 +3481,10 @@ CREATE UNIQUE INDEX index_manufacturers_on_slug ON manufacturers USING btree (sl
 
 
 --
--- Name: index_manufacturers_on_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_manufacturers_on_updater_id ON manufacturers USING btree (updater_id);
-
-
---
--- Name: index_memberships_on_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_memberships_on_creator_id ON memberships USING btree (creator_id);
-
-
---
--- Name: index_memberships_on_group_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_memberships_on_group_id ON memberships USING btree (group_id);
-
-
---
--- Name: index_memberships_on_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_memberships_on_person_id ON memberships USING btree (person_id);
-
-
---
--- Name: index_memberships_on_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_memberships_on_updater_id ON memberships USING btree (updater_id);
-
-
---
--- Name: index_order_items_on_order_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_order_items_on_order_id ON order_items USING btree (order_id);
-
-
---
--- Name: index_order_items_on_sku_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_order_items_on_sku_id ON order_items USING btree (sku_id);
-
-
---
--- Name: index_order_logs_on_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_order_logs_on_creator_id ON order_logs USING btree (creator_id);
-
-
---
--- Name: index_order_logs_on_order_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_order_logs_on_order_id ON order_logs USING btree (order_id);
-
-
---
--- Name: index_order_logs_on_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_order_logs_on_updater_id ON order_logs USING btree (updater_id);
-
-
---
--- Name: index_orders_on_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_orders_on_creator_id ON orders USING btree (creator_id);
-
-
---
--- Name: index_orders_on_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_orders_on_person_id ON orders USING btree (person_id);
-
-
---
--- Name: index_orders_on_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_orders_on_updater_id ON orders USING btree (updater_id);
-
-
---
--- Name: index_page_assets_on_asset_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_page_assets_on_asset_id ON page_assets USING btree (asset_id);
-
-
---
--- Name: index_page_assets_on_page_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_page_assets_on_page_id ON page_assets USING btree (page_id);
-
-
---
--- Name: index_pages_on_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_pages_on_creator_id ON pages USING btree (creator_id);
-
-
---
--- Name: index_pages_on_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_pages_on_updater_id ON pages USING btree (updater_id);
-
-
---
 -- Name: index_people_on_reset_password_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX index_people_on_reset_password_token ON people USING btree (reset_password_token);
-
-
---
--- Name: index_product_assets_on_asset_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_product_assets_on_asset_id ON product_assets USING btree (asset_id);
-
-
---
--- Name: index_product_assets_on_product_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_product_assets_on_product_id ON product_assets USING btree (product_id);
-
-
---
--- Name: index_product_categories_on_asset_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_product_categories_on_asset_id ON product_categories USING btree (asset_id);
-
-
---
--- Name: index_product_categories_on_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_product_categories_on_creator_id ON product_categories USING btree (creator_id);
-
-
---
--- Name: index_product_categories_on_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_product_categories_on_updater_id ON product_categories USING btree (updater_id);
-
-
---
--- Name: index_product_ranges_on_asset_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_product_ranges_on_asset_id ON product_ranges USING btree (asset_id);
-
-
---
--- Name: index_product_ranges_on_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_product_ranges_on_creator_id ON product_ranges USING btree (creator_id);
 
 
 --
@@ -2686,48 +3502,6 @@ CREATE UNIQUE INDEX index_product_ranges_on_slug ON product_ranges USING btree (
 
 
 --
--- Name: index_product_ranges_on_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_product_ranges_on_updater_id ON product_ranges USING btree (updater_id);
-
-
---
--- Name: index_product_variant_assets_on_asset_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_product_variant_assets_on_asset_id ON product_variant_assets USING btree (asset_id);
-
-
---
--- Name: index_product_variant_assets_on_product_variant_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_product_variant_assets_on_product_variant_id ON product_variant_assets USING btree (product_variant_id);
-
-
---
--- Name: index_product_variants_on_product_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_product_variants_on_product_id ON product_variants USING btree (product_id);
-
-
---
--- Name: index_products_on_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_products_on_creator_id ON products USING btree (creator_id);
-
-
---
--- Name: index_products_on_manufacturer_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_products_on_manufacturer_id ON products USING btree (manufacturer_id);
-
-
---
 -- Name: index_products_on_name_and_product_category_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2735,143 +3509,10 @@ CREATE UNIQUE INDEX index_products_on_name_and_product_category_id ON products U
 
 
 --
--- Name: index_products_on_product_category_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_products_on_product_category_id ON products USING btree (product_category_id);
-
-
---
--- Name: index_products_on_product_range_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_products_on_product_range_id ON products USING btree (product_range_id);
-
-
---
 -- Name: index_products_on_slug_and_product_category_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX index_products_on_slug_and_product_category_id ON products USING btree (slug, product_category_id);
-
-
---
--- Name: index_products_on_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_products_on_updater_id ON products USING btree (updater_id);
-
-
---
--- Name: index_promotion_conditions_on_promotion_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_promotion_conditions_on_promotion_id ON promotion_conditions USING btree (promotion_id);
-
-
---
--- Name: index_promotion_effects_on_promotion_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_promotion_effects_on_promotion_id ON promotion_effects USING btree (promotion_id);
-
-
---
--- Name: index_sku_assets_on_asset_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_sku_assets_on_asset_id ON sku_assets USING btree (asset_id);
-
-
---
--- Name: index_sku_assets_on_sku_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_sku_assets_on_sku_id ON sku_assets USING btree (sku_id);
-
-
---
--- Name: index_sku_blog_entries_on_blog_entry_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_sku_blog_entries_on_blog_entry_id ON sku_blog_entries USING btree (blog_entry_id);
-
-
---
--- Name: index_sku_blog_entries_on_sku_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_sku_blog_entries_on_sku_id ON sku_blog_entries USING btree (sku_id);
-
-
---
--- Name: index_sku_price_logs_on_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_sku_price_logs_on_creator_id ON sku_price_logs USING btree (creator_id);
-
-
---
--- Name: index_sku_price_logs_on_sku_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_sku_price_logs_on_sku_id ON sku_price_logs USING btree (sku_id);
-
-
---
--- Name: index_sku_price_logs_on_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_sku_price_logs_on_updater_id ON sku_price_logs USING btree (updater_id);
-
-
---
--- Name: index_sku_stock_logs_on_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_sku_stock_logs_on_creator_id ON sku_stock_logs USING btree (creator_id);
-
-
---
--- Name: index_sku_stock_logs_on_sku_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_sku_stock_logs_on_sku_id ON sku_stock_logs USING btree (sku_id);
-
-
---
--- Name: index_sku_stock_logs_on_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_sku_stock_logs_on_updater_id ON sku_stock_logs USING btree (updater_id);
-
-
---
--- Name: index_skus_on_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_skus_on_creator_id ON skus USING btree (creator_id);
-
-
---
--- Name: index_skus_on_product_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_skus_on_product_id ON skus USING btree (product_id);
-
-
---
--- Name: index_skus_on_product_variant_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_skus_on_product_variant_id ON skus USING btree (product_variant_id);
-
-
---
--- Name: index_skus_on_updater_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_skus_on_updater_id ON skus USING btree (updater_id);
 
 
 --
@@ -2889,6 +3530,69 @@ CREATE UNIQUE INDEX index_users_on_reset_password_token ON users USING btree (re
 
 
 --
+-- Name: legacy_order_items_order_id_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX legacy_order_items_order_id_idx ON legacy_order_items USING btree (order_id);
+
+
+--
+-- Name: legacy_order_items_sku_id_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX legacy_order_items_sku_id_idx ON legacy_order_items USING btree (sku_id);
+
+
+--
+-- Name: legacy_orders_creator_id_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX legacy_orders_creator_id_idx ON legacy_orders USING btree (creator_id);
+
+
+--
+-- Name: legacy_orders_person_id_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX legacy_orders_person_id_idx ON legacy_orders USING btree (person_id);
+
+
+--
+-- Name: legacy_orders_updater_id_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX legacy_orders_updater_id_idx ON legacy_orders USING btree (updater_id);
+
+
+--
+-- Name: legacy_skus_creator_id_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX legacy_skus_creator_id_idx ON legacy_skus USING btree (creator_id);
+
+
+--
+-- Name: legacy_skus_product_id_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX legacy_skus_product_id_idx ON legacy_skus USING btree (product_id);
+
+
+--
+-- Name: legacy_skus_product_variant_id_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX legacy_skus_product_variant_id_idx ON legacy_skus USING btree (product_variant_id);
+
+
+--
+-- Name: legacy_skus_updater_id_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX legacy_skus_updater_id_idx ON legacy_skus USING btree (updater_id);
+
+
+--
 -- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2896,632 +3600,770 @@ CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (v
 
 
 --
--- Name: applied_promotions_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_applied_promotions_order_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY applied_promotions
-    ADD CONSTRAINT applied_promotions_order_id_fkey FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_applied_promotions_order_id FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE;
 
 
 --
--- Name: applied_promotions_promotion_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_applied_promotions_promotion_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY applied_promotions
-    ADD CONSTRAINT applied_promotions_promotion_id_fkey FOREIGN KEY (promotion_id) REFERENCES promotions(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_applied_promotions_promotion_id FOREIGN KEY (promotion_id) REFERENCES promotions(id) ON DELETE CASCADE;
 
 
 --
--- Name: asset_groups_creator_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY asset_groups
-    ADD CONSTRAINT asset_groups_creator_id_fkey FOREIGN KEY (creator_id) REFERENCES users(id);
-
-
---
--- Name: asset_groups_updater_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_asset_groups_creator_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY asset_groups
-    ADD CONSTRAINT asset_groups_updater_id_fkey FOREIGN KEY (updater_id) REFERENCES users(id);
+    ADD CONSTRAINT fk_asset_groups_creator_id FOREIGN KEY (creator_id) REFERENCES users(id);
 
 
 --
--- Name: asset_taggings_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_asset_groups_updater_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY asset_groups
+    ADD CONSTRAINT fk_asset_groups_updater_id FOREIGN KEY (updater_id) REFERENCES users(id);
+
+
+--
+-- Name: fk_asset_taggings_asset_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY asset_taggings
-    ADD CONSTRAINT asset_taggings_asset_id_fkey FOREIGN KEY (asset_id) REFERENCES assets(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_asset_taggings_asset_id FOREIGN KEY (asset_id) REFERENCES assets(id) ON DELETE CASCADE;
 
 
 --
--- Name: asset_taggings_asset_tag_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_asset_taggings_asset_tag_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY asset_taggings
-    ADD CONSTRAINT asset_taggings_asset_tag_id_fkey FOREIGN KEY (asset_tag_id) REFERENCES asset_tags(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_asset_taggings_asset_tag_id FOREIGN KEY (asset_tag_id) REFERENCES asset_tags(id) ON DELETE CASCADE;
 
 
 --
--- Name: assets_asset_group_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY assets
-    ADD CONSTRAINT assets_asset_group_id_fkey FOREIGN KEY (asset_group_id) REFERENCES asset_groups(id) ON DELETE CASCADE;
-
-
---
--- Name: assets_creator_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_assets_asset_group_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY assets
-    ADD CONSTRAINT assets_creator_id_fkey FOREIGN KEY (creator_id) REFERENCES users(id);
+    ADD CONSTRAINT fk_assets_asset_group_id FOREIGN KEY (asset_group_id) REFERENCES asset_groups(id) ON DELETE CASCADE;
 
 
 --
--- Name: assets_updater_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_assets_creator_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY assets
-    ADD CONSTRAINT assets_updater_id_fkey FOREIGN KEY (updater_id) REFERENCES users(id);
+    ADD CONSTRAINT fk_assets_creator_id FOREIGN KEY (creator_id) REFERENCES users(id);
 
 
 --
--- Name: blog_assets_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_assets_updater_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY assets
+    ADD CONSTRAINT fk_assets_updater_id FOREIGN KEY (updater_id) REFERENCES users(id);
+
+
+--
+-- Name: fk_blog_assets_asset_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY blog_assets
-    ADD CONSTRAINT blog_assets_asset_id_fkey FOREIGN KEY (asset_id) REFERENCES assets(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_blog_assets_asset_id FOREIGN KEY (asset_id) REFERENCES assets(id) ON DELETE CASCADE;
 
 
 --
--- Name: blog_assets_blog_entry_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_blog_assets_blog_entry_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY blog_assets
-    ADD CONSTRAINT blog_assets_blog_entry_id_fkey FOREIGN KEY (blog_entry_id) REFERENCES blog_entries(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_blog_assets_blog_entry_id FOREIGN KEY (blog_entry_id) REFERENCES blog_entries(id) ON DELETE CASCADE;
 
 
 --
--- Name: blog_comments_blog_entry_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_blog_comments_blog_entry_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY blog_comments
-    ADD CONSTRAINT blog_comments_blog_entry_id_fkey FOREIGN KEY (blog_entry_id) REFERENCES blog_entries(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_blog_comments_blog_entry_id FOREIGN KEY (blog_entry_id) REFERENCES blog_entries(id) ON DELETE CASCADE;
 
 
 --
--- Name: blog_entries_author_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY blog_entries
-    ADD CONSTRAINT blog_entries_author_id_fkey FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE CASCADE;
-
-
---
--- Name: blog_entries_creator_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_blog_entries_author_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY blog_entries
-    ADD CONSTRAINT blog_entries_creator_id_fkey FOREIGN KEY (creator_id) REFERENCES users(id);
+    ADD CONSTRAINT fk_blog_entries_author_id FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE CASCADE;
 
 
 --
--- Name: blog_entries_updater_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_blog_entries_creator_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY blog_entries
-    ADD CONSTRAINT blog_entries_updater_id_fkey FOREIGN KEY (updater_id) REFERENCES users(id);
+    ADD CONSTRAINT fk_blog_entries_creator_id FOREIGN KEY (creator_id) REFERENCES users(id);
 
 
 --
--- Name: blog_taggings_blog_entry_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_blog_entries_updater_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY blog_entries
+    ADD CONSTRAINT fk_blog_entries_updater_id FOREIGN KEY (updater_id) REFERENCES users(id);
+
+
+--
+-- Name: fk_blog_taggings_blog_entry_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY blog_taggings
-    ADD CONSTRAINT blog_taggings_blog_entry_id_fkey FOREIGN KEY (blog_entry_id) REFERENCES blog_entries(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_blog_taggings_blog_entry_id FOREIGN KEY (blog_entry_id) REFERENCES blog_entries(id) ON DELETE CASCADE;
 
 
 --
--- Name: blog_taggings_blog_tag_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_blog_taggings_blog_tag_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY blog_taggings
-    ADD CONSTRAINT blog_taggings_blog_tag_id_fkey FOREIGN KEY (blog_tag_id) REFERENCES blog_tags(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_blog_taggings_blog_tag_id FOREIGN KEY (blog_tag_id) REFERENCES blog_tags(id) ON DELETE CASCADE;
 
 
 --
--- Name: credit_card_payments_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY credit_card_payments
-    ADD CONSTRAINT credit_card_payments_order_id_fkey FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE;
-
-
---
--- Name: credit_card_transactions_credit_card_payment_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY credit_card_transactions
-    ADD CONSTRAINT credit_card_transactions_credit_card_payment_id_fkey FOREIGN KEY (credit_card_payment_id) REFERENCES credit_card_payments(id) ON DELETE CASCADE;
-
-
---
--- Name: features_creator_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_features_creator_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY features
-    ADD CONSTRAINT features_creator_id_fkey FOREIGN KEY (creator_id) REFERENCES users(id);
+    ADD CONSTRAINT fk_features_creator_id FOREIGN KEY (creator_id) REFERENCES users(id);
 
 
 --
--- Name: features_page_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY features
-    ADD CONSTRAINT features_page_id_fkey FOREIGN KEY (page_id) REFERENCES pages(id) ON DELETE CASCADE;
-
-
---
--- Name: features_primary_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_features_page_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY features
-    ADD CONSTRAINT features_primary_asset_id_fkey FOREIGN KEY (primary_asset_id) REFERENCES assets(id) ON DELETE SET NULL;
+    ADD CONSTRAINT fk_features_page_id FOREIGN KEY (page_id) REFERENCES pages(id) ON DELETE CASCADE;
 
 
 --
--- Name: features_secondary_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY features
-    ADD CONSTRAINT features_secondary_asset_id_fkey FOREIGN KEY (secondary_asset_id) REFERENCES assets(id) ON DELETE SET NULL;
-
-
---
--- Name: features_updater_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_features_primary_asset_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY features
-    ADD CONSTRAINT features_updater_id_fkey FOREIGN KEY (updater_id) REFERENCES users(id);
+    ADD CONSTRAINT fk_features_primary_asset_id FOREIGN KEY (primary_asset_id) REFERENCES assets(id) ON DELETE SET NULL;
 
 
 --
--- Name: groups_creator_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_features_secondary_asset_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY features
+    ADD CONSTRAINT fk_features_secondary_asset_id FOREIGN KEY (secondary_asset_id) REFERENCES assets(id) ON DELETE SET NULL;
+
+
+--
+-- Name: fk_features_updater_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY features
+    ADD CONSTRAINT fk_features_updater_id FOREIGN KEY (updater_id) REFERENCES users(id);
+
+
+--
+-- Name: fk_groups_creator_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY groups
-    ADD CONSTRAINT groups_creator_id_fkey FOREIGN KEY (creator_id) REFERENCES users(id);
+    ADD CONSTRAINT fk_groups_creator_id FOREIGN KEY (creator_id) REFERENCES users(id);
 
 
 --
--- Name: groups_updater_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_groups_updater_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY groups
-    ADD CONSTRAINT groups_updater_id_fkey FOREIGN KEY (updater_id) REFERENCES users(id);
+    ADD CONSTRAINT fk_groups_updater_id FOREIGN KEY (updater_id) REFERENCES users(id);
 
 
 --
--- Name: manufacturer_assets_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_legacy_credit_card_payments_order_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY legacy_credit_card_payments
+    ADD CONSTRAINT fk_legacy_credit_card_payments_order_id FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE;
+
+
+--
+-- Name: fk_legacy_credit_card_transactions_credit_card_payment_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY legacy_credit_card_transactions
+    ADD CONSTRAINT fk_legacy_credit_card_transactions_credit_card_payment_id FOREIGN KEY (credit_card_payment_id) REFERENCES legacy_credit_card_payments(id) ON DELETE CASCADE;
+
+
+--
+-- Name: fk_legacy_sku_price_logs_creator_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY legacy_sku_price_logs
+    ADD CONSTRAINT fk_legacy_sku_price_logs_creator_id FOREIGN KEY (creator_id) REFERENCES users(id);
+
+
+--
+-- Name: fk_legacy_sku_price_logs_sku_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY legacy_sku_price_logs
+    ADD CONSTRAINT fk_legacy_sku_price_logs_sku_id FOREIGN KEY (sku_id) REFERENCES skus(id) ON DELETE CASCADE;
+
+
+--
+-- Name: fk_legacy_sku_price_logs_updater_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY legacy_sku_price_logs
+    ADD CONSTRAINT fk_legacy_sku_price_logs_updater_id FOREIGN KEY (updater_id) REFERENCES users(id);
+
+
+--
+-- Name: fk_manufacturer_assets_asset_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY manufacturer_assets
-    ADD CONSTRAINT manufacturer_assets_asset_id_fkey FOREIGN KEY (asset_id) REFERENCES assets(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_manufacturer_assets_asset_id FOREIGN KEY (asset_id) REFERENCES assets(id) ON DELETE CASCADE;
 
 
 --
--- Name: manufacturer_assets_manufacturer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_manufacturer_assets_manufacturer_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY manufacturer_assets
-    ADD CONSTRAINT manufacturer_assets_manufacturer_id_fkey FOREIGN KEY (manufacturer_id) REFERENCES manufacturers(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_manufacturer_assets_manufacturer_id FOREIGN KEY (manufacturer_id) REFERENCES manufacturers(id) ON DELETE CASCADE;
 
 
 --
--- Name: manufacturers_creator_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY manufacturers
-    ADD CONSTRAINT manufacturers_creator_id_fkey FOREIGN KEY (creator_id) REFERENCES users(id);
-
-
---
--- Name: manufacturers_updater_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_manufacturers_creator_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY manufacturers
-    ADD CONSTRAINT manufacturers_updater_id_fkey FOREIGN KEY (updater_id) REFERENCES users(id);
+    ADD CONSTRAINT fk_manufacturers_creator_id FOREIGN KEY (creator_id) REFERENCES users(id);
 
 
 --
--- Name: memberships_creator_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_manufacturers_updater_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY memberships
-    ADD CONSTRAINT memberships_creator_id_fkey FOREIGN KEY (creator_id) REFERENCES users(id);
-
-
---
--- Name: memberships_group_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY memberships
-    ADD CONSTRAINT memberships_group_id_fkey FOREIGN KEY (group_id) REFERENCES groups(id);
+ALTER TABLE ONLY manufacturers
+    ADD CONSTRAINT fk_manufacturers_updater_id FOREIGN KEY (updater_id) REFERENCES users(id);
 
 
 --
--- Name: memberships_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_memberships_creator_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY memberships
-    ADD CONSTRAINT memberships_person_id_fkey FOREIGN KEY (person_id) REFERENCES people(id);
+    ADD CONSTRAINT fk_memberships_creator_id FOREIGN KEY (creator_id) REFERENCES users(id);
 
 
 --
--- Name: memberships_updater_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_memberships_group_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY memberships
-    ADD CONSTRAINT memberships_updater_id_fkey FOREIGN KEY (updater_id) REFERENCES users(id);
+    ADD CONSTRAINT fk_memberships_group_id FOREIGN KEY (group_id) REFERENCES groups(id);
 
 
 --
--- Name: order_items_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_memberships_person_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY memberships
+    ADD CONSTRAINT fk_memberships_person_id FOREIGN KEY (person_id) REFERENCES people(id);
+
+
+--
+-- Name: fk_memberships_updater_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY memberships
+    ADD CONSTRAINT fk_memberships_updater_id FOREIGN KEY (updater_id) REFERENCES users(id);
+
+
+--
+-- Name: fk_order_adjustments_order_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY order_adjustments
+    ADD CONSTRAINT fk_order_adjustments_order_id FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE;
+
+
+--
+-- Name: fk_order_item_adjustments_order_item_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY order_item_adjustments
+    ADD CONSTRAINT fk_order_item_adjustments_order_item_id FOREIGN KEY (order_item_id) REFERENCES order_items(id) ON DELETE CASCADE;
+
+
+--
+-- Name: fk_order_item_components_order_item_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY order_item_components
+    ADD CONSTRAINT fk_order_item_components_order_item_id FOREIGN KEY (order_item_id) REFERENCES order_items(id) ON DELETE CASCADE;
+
+
+--
+-- Name: fk_order_items_order_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_items
-    ADD CONSTRAINT order_items_order_id_fkey FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_order_items_order_id FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE;
 
 
 --
--- Name: order_items_sku_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_order_items_service_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_items
-    ADD CONSTRAINT order_items_sku_id_fkey FOREIGN KEY (sku_id) REFERENCES skus(id);
+    ADD CONSTRAINT fk_order_items_service_id FOREIGN KEY (service_id) REFERENCES services(id);
 
 
 --
--- Name: order_logs_creator_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_order_items_sku_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY order_logs
-    ADD CONSTRAINT order_logs_creator_id_fkey FOREIGN KEY (creator_id) REFERENCES users(id);
-
-
---
--- Name: order_logs_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY order_logs
-    ADD CONSTRAINT order_logs_order_id_fkey FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE;
+ALTER TABLE ONLY order_items
+    ADD CONSTRAINT fk_order_items_sku_id FOREIGN KEY (sku_id) REFERENCES skus(id);
 
 
 --
--- Name: order_logs_updater_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_order_logs_creator_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_logs
-    ADD CONSTRAINT order_logs_updater_id_fkey FOREIGN KEY (updater_id) REFERENCES users(id);
+    ADD CONSTRAINT fk_order_logs_creator_id FOREIGN KEY (creator_id) REFERENCES users(id);
 
 
 --
--- Name: orders_creator_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_order_logs_order_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY order_logs
+    ADD CONSTRAINT fk_order_logs_order_id FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE;
+
+
+--
+-- Name: fk_order_logs_updater_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY order_logs
+    ADD CONSTRAINT fk_order_logs_updater_id FOREIGN KEY (updater_id) REFERENCES users(id);
+
+
+--
+-- Name: fk_order_payments_order_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY order_payments
+    ADD CONSTRAINT fk_order_payments_order_id FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE;
+
+
+--
+-- Name: fk_orders_creator_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders
-    ADD CONSTRAINT orders_creator_id_fkey FOREIGN KEY (creator_id) REFERENCES users(id);
+    ADD CONSTRAINT fk_orders_creator_id FOREIGN KEY (creator_id) REFERENCES users(id);
 
 
 --
--- Name: orders_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY orders
-    ADD CONSTRAINT orders_person_id_fkey FOREIGN KEY (person_id) REFERENCES people(id) ON DELETE SET NULL;
-
-
---
--- Name: orders_updater_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_orders_person_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders
-    ADD CONSTRAINT orders_updater_id_fkey FOREIGN KEY (updater_id) REFERENCES users(id);
+    ADD CONSTRAINT fk_orders_person_id FOREIGN KEY (person_id) REFERENCES people(id) ON DELETE SET NULL;
 
 
 --
--- Name: page_assets_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_orders_updater_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY orders
+    ADD CONSTRAINT fk_orders_updater_id FOREIGN KEY (updater_id) REFERENCES users(id);
+
+
+--
+-- Name: fk_page_assets_asset_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY page_assets
-    ADD CONSTRAINT page_assets_asset_id_fkey FOREIGN KEY (asset_id) REFERENCES assets(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_page_assets_asset_id FOREIGN KEY (asset_id) REFERENCES assets(id) ON DELETE CASCADE;
 
 
 --
--- Name: page_assets_page_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_page_assets_page_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY page_assets
-    ADD CONSTRAINT page_assets_page_id_fkey FOREIGN KEY (page_id) REFERENCES pages(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_page_assets_page_id FOREIGN KEY (page_id) REFERENCES pages(id) ON DELETE CASCADE;
 
 
 --
--- Name: pages_creator_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY pages
-    ADD CONSTRAINT pages_creator_id_fkey FOREIGN KEY (creator_id) REFERENCES users(id);
-
-
---
--- Name: pages_updater_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_pages_creator_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY pages
-    ADD CONSTRAINT pages_updater_id_fkey FOREIGN KEY (updater_id) REFERENCES users(id);
+    ADD CONSTRAINT fk_pages_creator_id FOREIGN KEY (creator_id) REFERENCES users(id);
 
 
 --
--- Name: product_assets_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_pages_updater_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY pages
+    ADD CONSTRAINT fk_pages_updater_id FOREIGN KEY (updater_id) REFERENCES users(id);
+
+
+--
+-- Name: fk_product_assets_asset_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY product_assets
-    ADD CONSTRAINT product_assets_asset_id_fkey FOREIGN KEY (asset_id) REFERENCES assets(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_product_assets_asset_id FOREIGN KEY (asset_id) REFERENCES assets(id) ON DELETE CASCADE;
 
 
 --
--- Name: product_assets_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_product_assets_product_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY product_assets
-    ADD CONSTRAINT product_assets_product_id_fkey FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_product_assets_product_id FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE;
 
 
 --
--- Name: product_categories_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY product_categories
-    ADD CONSTRAINT product_categories_asset_id_fkey FOREIGN KEY (asset_id) REFERENCES assets(id);
-
-
---
--- Name: product_categories_creator_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_product_categories_asset_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY product_categories
-    ADD CONSTRAINT product_categories_creator_id_fkey FOREIGN KEY (creator_id) REFERENCES users(id);
+    ADD CONSTRAINT fk_product_categories_asset_id FOREIGN KEY (asset_id) REFERENCES assets(id);
 
 
 --
--- Name: product_categories_updater_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_product_categories_creator_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY product_categories
-    ADD CONSTRAINT product_categories_updater_id_fkey FOREIGN KEY (updater_id) REFERENCES users(id);
+    ADD CONSTRAINT fk_product_categories_creator_id FOREIGN KEY (creator_id) REFERENCES users(id);
 
 
 --
--- Name: product_ranges_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_product_categories_updater_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY product_ranges
-    ADD CONSTRAINT product_ranges_asset_id_fkey FOREIGN KEY (asset_id) REFERENCES assets(id);
-
-
---
--- Name: product_ranges_creator_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY product_ranges
-    ADD CONSTRAINT product_ranges_creator_id_fkey FOREIGN KEY (creator_id) REFERENCES users(id);
+ALTER TABLE ONLY product_categories
+    ADD CONSTRAINT fk_product_categories_updater_id FOREIGN KEY (updater_id) REFERENCES users(id);
 
 
 --
--- Name: product_ranges_updater_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_product_ranges_asset_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY product_ranges
-    ADD CONSTRAINT product_ranges_updater_id_fkey FOREIGN KEY (updater_id) REFERENCES users(id);
+    ADD CONSTRAINT fk_product_ranges_asset_id FOREIGN KEY (asset_id) REFERENCES assets(id);
 
 
 --
--- Name: product_variant_assets_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_product_ranges_creator_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY product_ranges
+    ADD CONSTRAINT fk_product_ranges_creator_id FOREIGN KEY (creator_id) REFERENCES users(id);
+
+
+--
+-- Name: fk_product_ranges_updater_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY product_ranges
+    ADD CONSTRAINT fk_product_ranges_updater_id FOREIGN KEY (updater_id) REFERENCES users(id);
+
+
+--
+-- Name: fk_product_variant_assets_asset_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY product_variant_assets
-    ADD CONSTRAINT product_variant_assets_asset_id_fkey FOREIGN KEY (asset_id) REFERENCES assets(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_product_variant_assets_asset_id FOREIGN KEY (asset_id) REFERENCES assets(id) ON DELETE CASCADE;
 
 
 --
--- Name: product_variant_assets_product_variant_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_product_variant_assets_product_variant_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY product_variant_assets
-    ADD CONSTRAINT product_variant_assets_product_variant_id_fkey FOREIGN KEY (product_variant_id) REFERENCES product_variants(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_product_variant_assets_product_variant_id FOREIGN KEY (product_variant_id) REFERENCES product_variants(id) ON DELETE CASCADE;
 
 
 --
--- Name: product_variants_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_product_variants_product_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY product_variants
-    ADD CONSTRAINT product_variants_product_id_fkey FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_product_variants_product_id FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE;
 
 
 --
--- Name: products_creator_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY products
-    ADD CONSTRAINT products_creator_id_fkey FOREIGN KEY (creator_id) REFERENCES users(id);
-
-
---
--- Name: products_manufacturer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_products_creator_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY products
-    ADD CONSTRAINT products_manufacturer_id_fkey FOREIGN KEY (manufacturer_id) REFERENCES manufacturers(id);
+    ADD CONSTRAINT fk_products_creator_id FOREIGN KEY (creator_id) REFERENCES users(id);
 
 
 --
--- Name: products_product_category_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY products
-    ADD CONSTRAINT products_product_category_id_fkey FOREIGN KEY (product_category_id) REFERENCES product_categories(id) ON DELETE CASCADE;
-
-
---
--- Name: products_product_range_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_products_manufacturer_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY products
-    ADD CONSTRAINT products_product_range_id_fkey FOREIGN KEY (product_range_id) REFERENCES product_ranges(id) ON DELETE SET NULL;
+    ADD CONSTRAINT fk_products_manufacturer_id FOREIGN KEY (manufacturer_id) REFERENCES manufacturers(id);
 
 
 --
--- Name: products_updater_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_products_product_category_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY products
-    ADD CONSTRAINT products_updater_id_fkey FOREIGN KEY (updater_id) REFERENCES users(id);
+    ADD CONSTRAINT fk_products_product_category_id FOREIGN KEY (product_category_id) REFERENCES product_categories(id) ON DELETE CASCADE;
 
 
 --
--- Name: promotion_conditions_promotion_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_products_product_range_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY products
+    ADD CONSTRAINT fk_products_product_range_id FOREIGN KEY (product_range_id) REFERENCES product_ranges(id) ON DELETE SET NULL;
+
+
+--
+-- Name: fk_products_updater_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY products
+    ADD CONSTRAINT fk_products_updater_id FOREIGN KEY (updater_id) REFERENCES users(id);
+
+
+--
+-- Name: fk_promotion_codes_order_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY promotion_codes
+    ADD CONSTRAINT fk_promotion_codes_order_id FOREIGN KEY (order_id) REFERENCES orders(id);
+
+
+--
+-- Name: fk_promotion_codes_promotion_condition_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY promotion_codes
+    ADD CONSTRAINT fk_promotion_codes_promotion_condition_id FOREIGN KEY (promotion_condition_id) REFERENCES promotion_conditions(id);
+
+
+--
+-- Name: fk_promotion_conditions_promotion_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY promotion_conditions
-    ADD CONSTRAINT promotion_conditions_promotion_id_fkey FOREIGN KEY (promotion_id) REFERENCES promotions(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_promotion_conditions_promotion_id FOREIGN KEY (promotion_id) REFERENCES promotions(id) ON DELETE CASCADE;
 
 
 --
--- Name: promotion_effects_promotion_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_promotion_effects_promotion_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY promotion_effects
-    ADD CONSTRAINT promotion_effects_promotion_id_fkey FOREIGN KEY (promotion_id) REFERENCES promotions(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_promotion_effects_promotion_id FOREIGN KEY (promotion_id) REFERENCES promotions(id) ON DELETE CASCADE;
 
 
 --
--- Name: sku_assets_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_promotions_creator_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY promotions
+    ADD CONSTRAINT fk_promotions_creator_id FOREIGN KEY (creator_id) REFERENCES users(id);
+
+
+--
+-- Name: fk_promotions_updater_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY promotions
+    ADD CONSTRAINT fk_promotions_updater_id FOREIGN KEY (updater_id) REFERENCES users(id);
+
+
+--
+-- Name: fk_service_price_points_creator_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY service_price_points
+    ADD CONSTRAINT fk_service_price_points_creator_id FOREIGN KEY (creator_id) REFERENCES users(id);
+
+
+--
+-- Name: fk_service_price_points_service_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY service_price_points
+    ADD CONSTRAINT fk_service_price_points_service_id FOREIGN KEY (service_id) REFERENCES services(id) ON DELETE CASCADE;
+
+
+--
+-- Name: fk_service_price_points_updater_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY service_price_points
+    ADD CONSTRAINT fk_service_price_points_updater_id FOREIGN KEY (updater_id) REFERENCES users(id);
+
+
+--
+-- Name: fk_services_creator_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY services
+    ADD CONSTRAINT fk_services_creator_id FOREIGN KEY (creator_id) REFERENCES users(id);
+
+
+--
+-- Name: fk_services_updater_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY services
+    ADD CONSTRAINT fk_services_updater_id FOREIGN KEY (updater_id) REFERENCES users(id);
+
+
+--
+-- Name: fk_sku_assets_asset_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY sku_assets
-    ADD CONSTRAINT sku_assets_asset_id_fkey FOREIGN KEY (asset_id) REFERENCES assets(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_sku_assets_asset_id FOREIGN KEY (asset_id) REFERENCES assets(id) ON DELETE CASCADE;
 
 
 --
--- Name: sku_assets_sku_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_sku_assets_sku_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY sku_assets
-    ADD CONSTRAINT sku_assets_sku_id_fkey FOREIGN KEY (sku_id) REFERENCES skus(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_sku_assets_sku_id FOREIGN KEY (sku_id) REFERENCES skus(id) ON DELETE CASCADE;
 
 
 --
--- Name: sku_blog_entries_blog_entry_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY sku_blog_entries
-    ADD CONSTRAINT sku_blog_entries_blog_entry_id_fkey FOREIGN KEY (blog_entry_id) REFERENCES blog_entries(id) ON DELETE CASCADE;
-
-
---
--- Name: sku_blog_entries_sku_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_sku_blog_entries_blog_entry_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY sku_blog_entries
-    ADD CONSTRAINT sku_blog_entries_sku_id_fkey FOREIGN KEY (sku_id) REFERENCES skus(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_sku_blog_entries_blog_entry_id FOREIGN KEY (blog_entry_id) REFERENCES blog_entries(id) ON DELETE CASCADE;
 
 
 --
--- Name: sku_price_logs_creator_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_sku_blog_entries_sku_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY sku_price_logs
-    ADD CONSTRAINT sku_price_logs_creator_id_fkey FOREIGN KEY (creator_id) REFERENCES users(id);
-
-
---
--- Name: sku_price_logs_sku_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY sku_price_logs
-    ADD CONSTRAINT sku_price_logs_sku_id_fkey FOREIGN KEY (sku_id) REFERENCES skus(id) ON DELETE CASCADE;
+ALTER TABLE ONLY sku_blog_entries
+    ADD CONSTRAINT fk_sku_blog_entries_sku_id FOREIGN KEY (sku_id) REFERENCES skus(id) ON DELETE CASCADE;
 
 
 --
--- Name: sku_price_logs_updater_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_sku_price_points_creator_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY sku_price_logs
-    ADD CONSTRAINT sku_price_logs_updater_id_fkey FOREIGN KEY (updater_id) REFERENCES users(id);
-
-
---
--- Name: sku_stock_logs_creator_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY sku_stock_logs
-    ADD CONSTRAINT sku_stock_logs_creator_id_fkey FOREIGN KEY (creator_id) REFERENCES users(id);
+ALTER TABLE ONLY sku_price_points
+    ADD CONSTRAINT fk_sku_price_points_creator_id FOREIGN KEY (creator_id) REFERENCES users(id);
 
 
 --
--- Name: sku_stock_logs_sku_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_sku_price_points_sku_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY sku_stock_logs
-    ADD CONSTRAINT sku_stock_logs_sku_id_fkey FOREIGN KEY (sku_id) REFERENCES skus(id) ON DELETE CASCADE;
+ALTER TABLE ONLY sku_price_points
+    ADD CONSTRAINT fk_sku_price_points_sku_id FOREIGN KEY (sku_id) REFERENCES skus(id) ON DELETE CASCADE;
 
 
 --
--- Name: sku_stock_logs_updater_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_sku_price_points_updater_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY sku_price_points
+    ADD CONSTRAINT fk_sku_price_points_updater_id FOREIGN KEY (updater_id) REFERENCES users(id);
+
+
+--
+-- Name: fk_sku_stock_logs_creator_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY sku_stock_logs
-    ADD CONSTRAINT sku_stock_logs_updater_id_fkey FOREIGN KEY (updater_id) REFERENCES users(id);
+    ADD CONSTRAINT fk_sku_stock_logs_creator_id FOREIGN KEY (creator_id) REFERENCES users(id);
 
 
 --
--- Name: skus_creator_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_sku_stock_logs_sku_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY skus
-    ADD CONSTRAINT skus_creator_id_fkey FOREIGN KEY (creator_id) REFERENCES users(id);
-
-
---
--- Name: skus_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY skus
-    ADD CONSTRAINT skus_product_id_fkey FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE;
+ALTER TABLE ONLY sku_stock_logs
+    ADD CONSTRAINT fk_sku_stock_logs_sku_id FOREIGN KEY (sku_id) REFERENCES skus(id) ON DELETE CASCADE;
 
 
 --
--- Name: skus_product_variant_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_sku_stock_logs_updater_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY skus
-    ADD CONSTRAINT skus_product_variant_id_fkey FOREIGN KEY (product_variant_id) REFERENCES product_variants(id) ON DELETE SET NULL;
+ALTER TABLE ONLY sku_stock_logs
+    ADD CONSTRAINT fk_sku_stock_logs_updater_id FOREIGN KEY (updater_id) REFERENCES users(id);
 
 
 --
--- Name: skus_updater_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_skus_creator_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY skus
-    ADD CONSTRAINT skus_updater_id_fkey FOREIGN KEY (updater_id) REFERENCES users(id);
+    ADD CONSTRAINT fk_skus_creator_id FOREIGN KEY (creator_id) REFERENCES users(id);
+
+
+--
+-- Name: fk_skus_product_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY skus
+    ADD CONSTRAINT fk_skus_product_id FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE;
+
+
+--
+-- Name: fk_skus_product_variant_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY skus
+    ADD CONSTRAINT fk_skus_product_variant_id FOREIGN KEY (product_variant_id) REFERENCES product_variants(id) ON DELETE SET NULL;
+
+
+--
+-- Name: fk_skus_updater_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY skus
+    ADD CONSTRAINT fk_skus_updater_id FOREIGN KEY (updater_id) REFERENCES users(id);
 
 
 --
 -- PostgreSQL database dump complete
 --
+
+SET search_path TO "$user",public;
 
 INSERT INTO schema_migrations (version) VALUES ('20130116041505');
 
@@ -3630,3 +4472,37 @@ INSERT INTO schema_migrations (version) VALUES ('20130327002810');
 INSERT INTO schema_migrations (version) VALUES ('20130328012957');
 
 INSERT INTO schema_migrations (version) VALUES ('20130702003629');
+
+INSERT INTO schema_migrations (version) VALUES ('20130704051552');
+
+INSERT INTO schema_migrations (version) VALUES ('20130704052440');
+
+INSERT INTO schema_migrations (version) VALUES ('20130704052441');
+
+INSERT INTO schema_migrations (version) VALUES ('20130704052442');
+
+INSERT INTO schema_migrations (version) VALUES ('20130704052443');
+
+INSERT INTO schema_migrations (version) VALUES ('20130704052444');
+
+INSERT INTO schema_migrations (version) VALUES ('20130704052445');
+
+INSERT INTO schema_migrations (version) VALUES ('20130704052446');
+
+INSERT INTO schema_migrations (version) VALUES ('20130828023633');
+
+INSERT INTO schema_migrations (version) VALUES ('20130828023634');
+
+INSERT INTO schema_migrations (version) VALUES ('20130903234025');
+
+INSERT INTO schema_migrations (version) VALUES ('20130910035618');
+
+INSERT INTO schema_migrations (version) VALUES ('20130919011909');
+
+INSERT INTO schema_migrations (version) VALUES ('20130919011910');
+
+INSERT INTO schema_migrations (version) VALUES ('20130919011911');
+
+INSERT INTO schema_migrations (version) VALUES ('20130924064856');
+
+INSERT INTO schema_migrations (version) VALUES ('20130925005830');
