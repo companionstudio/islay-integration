@@ -3,6 +3,7 @@
 --
 
 SET statement_timeout = 0;
+SET lock_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
@@ -115,10 +116,10 @@ CREATE FUNCTION is_revenue(text, OUT boolean) RETURNS boolean
 
 
 --
--- Name: movement_dir(numeric, numeric); Type: FUNCTION; Schema: public; Owner: -
+-- Name: movement_dir(double precision, double precision); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION movement_dir(numeric, numeric, OUT text) RETURNS text
+CREATE FUNCTION movement_dir(double precision, double precision, OUT text) RETURNS text
     LANGUAGE sql
     AS $_$
         SELECT
@@ -132,10 +133,10 @@ CREATE FUNCTION movement_dir(numeric, numeric, OUT text) RETURNS text
 
 
 --
--- Name: movement_dir(double precision, double precision); Type: FUNCTION; Schema: public; Owner: -
+-- Name: movement_dir(numeric, numeric); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION movement_dir(double precision, double precision, OUT text) RETURNS text
+CREATE FUNCTION movement_dir(numeric, numeric, OUT text) RETURNS text
     LANGUAGE sql
     AS $_$
         SELECT
@@ -832,6 +833,8 @@ CREATE TABLE legacy_orders (
     use_shipping_address boolean NOT NULL,
     original_product_total double precision NOT NULL,
     product_total double precision NOT NULL,
+    original_shipping_total double precision NOT NULL,
+    shipping_total double precision NOT NULL,
     original_total double precision NOT NULL,
     total double precision NOT NULL,
     discount double precision NOT NULL,
@@ -843,9 +846,7 @@ CREATE TABLE legacy_orders (
     terms tsvector,
     tracking_reference character varying(30),
     billing_company character varying(200),
-    shipping_company character varying(200),
-    shipping_total double precision,
-    original_shipping_total double precision
+    shipping_company character varying(200)
 );
 
 
@@ -1273,7 +1274,7 @@ CREATE TABLE orders (
     product_total numeric(14,7) NOT NULL,
     original_total numeric(14,7) NOT NULL,
     total numeric(14,7) NOT NULL,
-    discount numeric(14,7) DEFAULT 0 NOT NULL,
+    discount double precision DEFAULT 0 NOT NULL,
     currency character varying(4) DEFAULT 'AUD'::character varying NOT NULL,
     creator_id integer,
     updater_id integer,
